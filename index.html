@@ -60,7 +60,6 @@
             border-radius: 16px 16px 0 0;
         }
 
-        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -101,7 +100,6 @@
             color: #fff;
         }
 
-        /* Theme Picker */
         .themes {
             display: flex;
             justify-content: center;
@@ -121,15 +119,6 @@
 
         .theme:hover { transform: scale(1.1); }
         .theme.active { border-color: #fff; }
-        .theme.active::after {
-            content: '✓';
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            font-size: 10px;
-            color: #fff;
-        }
 
         .theme[data-c="green"] { background: #22c55e; }
         .theme[data-c="blue"] { background: #3b82f6; }
@@ -138,7 +127,6 @@
         .theme[data-c="pink"] { background: #ec4899; }
         .theme[data-c="cyan"] { background: #06b6d4; }
 
-        /* Tabs */
         .tabs {
             display: flex;
             gap: 4px;
@@ -173,7 +161,6 @@
             color: rgba(255, 255, 255, 0.7);
         }
 
-        /* Upload */
         .upload {
             background: rgba(0, 0, 0, 0.25);
             border: 2px dashed rgba(255, 255, 255, 0.12);
@@ -235,7 +222,6 @@
 
         input[type="file"] { display: none; }
 
-        /* Results */
         .results {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -297,7 +283,6 @@
             border-radius: 8px;
         }
 
-        /* Piano */
         .piano-box {
             background: rgba(0, 0, 0, 0.25);
             border-radius: 12px;
@@ -330,6 +315,7 @@
         .piano {
             position: relative;
             height: 56px;
+            display: inline-block;
         }
 
         .whites {
@@ -348,12 +334,18 @@
             transition: all 0.1s;
             border: 1px solid #aaa;
             border-top: none;
+            user-select: none;
         }
 
         .wk:hover { background: linear-gradient(180deg, #fff, #eee); }
+        
+        .wk:active { 
+            background: linear-gradient(180deg, #e0e0e0, #ccc); 
+            transform: translateY(1px);
+        }
 
         .wk.on {
-            background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+            background: linear-gradient(180deg, var(--accent), var(--accent-dark)) !important;
             border-color: var(--accent-dark);
             box-shadow: 0 0 10px var(--glow);
         }
@@ -366,6 +358,7 @@
             font-size: 8px;
             font-weight: 600;
             color: #777;
+            pointer-events: none;
         }
 
         .wk.on span { color: #fff; }
@@ -373,15 +366,12 @@
         .blacks {
             position: absolute;
             top: 0;
-            left: 10px;
-            display: flex;
+            left: 0;
+            width: 100%;
             height: 34px;
-        }
-
-        .bk-slot {
-            width: 30px;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
+            padding-left: 19px;
         }
 
         .bk {
@@ -391,18 +381,26 @@
             border-radius: 0 0 3px 3px;
             cursor: pointer;
             transition: all 0.1s;
+            margin-right: 12px;
+            user-select: none;
+            flex-shrink: 0;
         }
 
+        .bk:nth-child(2) { margin-right: 42px; }
+        .bk:nth-child(5) { margin-right: 0; }
+
         .bk:hover { background: linear-gradient(180deg, #4a4a4a, #2a2a2a); }
+        
+        .bk:active { 
+            background: linear-gradient(180deg, #2a2a2a, #111); 
+            height: 32px;
+        }
 
         .bk.on {
-            background: linear-gradient(180deg, var(--accent-dark), #0a4020);
+            background: linear-gradient(180deg, var(--accent-dark), #0a4020) !important;
             box-shadow: 0 0 8px var(--glow);
         }
 
-        .bk.hide { visibility: hidden; }
-
-        /* Button */
         .btn {
             background: linear-gradient(135deg, var(--accent), var(--accent-dark));
             border: none;
@@ -449,11 +447,20 @@
         .btn.loading .btn-content { display: none; }
 
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        .audio-ctx {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
     <div class="app">
-        <!-- Header -->
         <div class="header">
             <div class="brand">
                 <div class="led" id="led"></div>
@@ -462,7 +469,6 @@
             <span class="title">AUTO-KEY</span>
         </div>
 
-        <!-- Themes -->
         <div class="themes">
             <div class="theme active" data-c="green"></div>
             <div class="theme" data-c="blue"></div>
@@ -472,14 +478,12 @@
             <div class="theme" data-c="cyan"></div>
         </div>
 
-        <!-- Tabs -->
         <div class="tabs">
             <button class="tab">Listen</button>
             <button class="tab active">Use File</button>
             <button class="tab">Manual</button>
         </div>
 
-        <!-- Upload -->
         <div class="upload" id="drop">
             <div class="wave" id="wave">
                 <svg viewBox="0 0 48 24"><path d="M1,12 Q6,3 12,12 T24,12 T36,12 T47,12" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round"/></svg>
@@ -489,7 +493,6 @@
             <input type="file" id="file" accept="audio/*">
         </div>
 
-        <!-- Results -->
         <div class="results">
             <div class="result" id="bpmBox">
                 <div class="result-label">BPM</div>
@@ -505,33 +508,30 @@
             </div>
         </div>
 
-        <!-- Piano -->
         <div class="piano-box">
             <div class="piano-label">Detected Key</div>
             <div class="piano-wrap">
-                <div class="piano">
+                <div class="piano" id="piano">
                     <div class="whites">
-                        <div class="wk" data-n="C"><span>C</span></div>
-                        <div class="wk" data-n="D"><span>D</span></div>
-                        <div class="wk" data-n="E"><span>E</span></div>
-                        <div class="wk" data-n="F"><span>F</span></div>
-                        <div class="wk" data-n="G"><span>G</span></div>
-                        <div class="wk" data-n="A"><span>A</span></div>
-                        <div class="wk" data-n="B"><span>B</span></div>
+                        <div class="wk" data-note="C"><span>C</span></div>
+                        <div class="wk" data-note="D"><span>D</span></div>
+                        <div class="wk" data-note="E"><span>E</span></div>
+                        <div class="wk" data-note="F"><span>F</span></div>
+                        <div class="wk" data-note="G"><span>G</span></div>
+                        <div class="wk" data-note="A"><span>A</span></div>
+                        <div class="wk" data-note="B"><span>B</span></div>
                     </div>
                     <div class="blacks">
-                        <div class="bk-slot"><div class="bk" data-n="C#"></div></div>
-                        <div class="bk-slot"><div class="bk" data-n="D#"></div></div>
-                        <div class="bk-slot"><div class="bk hide"></div></div>
-                        <div class="bk-slot"><div class="bk" data-n="F#"></div></div>
-                        <div class="bk-slot"><div class="bk" data-n="G#"></div></div>
-                        <div class="bk-slot"><div class="bk" data-n="A#"></div></div>
+                        <div class="bk" data-note="C#"></div>
+                        <div class="bk" data-note="D#"></div>
+                        <div class="bk" data-note="F#"></div>
+                        <div class="bk" data-note="G#"></div>
+                        <div class="bk" data-note="A#"></div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Analyze -->
         <button class="btn" id="analyze" disabled>
             <span class="btn-content">🎵 Analyze Track</span>
             <div class="spin"></div>
@@ -539,7 +539,10 @@
     </div>
 
 <script>
-(function(){
+(function() {
+    'use strict';
+
+    // Color themes
     const colors = {
         green:  { a: '#22c55e', d: '#15803d', g: 'rgba(34,197,94,0.5)' },
         blue:   { a: '#3b82f6', d: '#1d4ed8', g: 'rgba(59,130,246,0.5)' },
@@ -549,6 +552,14 @@
         cyan:   { a: '#06b6d4', d: '#0e7490', g: 'rgba(6,182,212,0.5)' }
     };
 
+    // Note frequencies for piano sound
+    const noteFreqs = {
+        'C': 261.63, 'C#': 277.18, 'D': 293.66, 'D#': 311.13,
+        'E': 329.63, 'F': 349.23, 'F#': 369.99, 'G': 392.00,
+        'G#': 415.30, 'A': 440.00, 'A#': 466.16, 'B': 493.88
+    };
+
+    // Elements
     const app = document.querySelector('.app');
     const led = document.getElementById('led');
     const drop = document.getElementById('drop');
@@ -562,288 +573,383 @@
     const scaleEl = document.getElementById('scale');
     const confEl = document.getElementById('conf');
     const btn = document.getElementById('analyze');
+    const piano = document.getElementById('piano');
 
-    let buffer = null;
-    let ctx = null;
-    let audio = null;
+    let audioBuffer = null;
+    let audioCtx = null;
 
-    // Theme
+    // Initialize audio context on user interaction
+    function initAudio() {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        return audioCtx;
+    }
+
+    // Theme switching
     document.querySelectorAll('.theme').forEach(t => {
-        t.onclick = () => {
+        t.addEventListener('click', () => {
             document.querySelectorAll('.theme').forEach(x => x.classList.remove('active'));
             t.classList.add('active');
             const c = colors[t.dataset.c];
             app.style.setProperty('--accent', c.a);
             app.style.setProperty('--accent-dark', c.d);
             app.style.setProperty('--glow', c.g);
-        };
+        });
     });
 
-    // Tabs
+    // Tab switching
     document.querySelectorAll('.tab').forEach(t => {
-        t.onclick = () => {
+        t.addEventListener('click', () => {
             document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
             t.classList.add('active');
-        };
+        });
     });
 
-    // Upload
-    drop.onclick = () => fileInput.click();
-    drop.ondragover = e => { e.preventDefault(); drop.classList.add('drag'); };
-    drop.ondragleave = () => drop.classList.remove('drag');
-    drop.ondrop = e => {
+    // Piano key functionality
+    function playNote(note) {
+        const ctx = initAudio();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.value = noteFreqs[note];
+        
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+        
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.5);
+    }
+
+    function highlightKey(note) {
+        document.querySelectorAll('.wk, .bk').forEach(k => k.classList.remove('on'));
+        const key = document.querySelector(`[data-note="${note}"]`);
+        if (key) key.classList.add('on');
+    }
+
+    // Piano click handlers
+    piano.addEventListener('click', (e) => {
+        const key = e.target.closest('[data-note]');
+        if (key) {
+            const note = key.dataset.note;
+            highlightKey(note);
+            playNote(note);
+            keyEl.textContent = note;
+        }
+    });
+
+    // Upload handlers
+    drop.addEventListener('click', () => fileInput.click());
+
+    drop.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        drop.classList.add('drag');
+    });
+
+    drop.addEventListener('dragleave', () => {
+        drop.classList.remove('drag');
+    });
+
+    drop.addEventListener('drop', (e) => {
         e.preventDefault();
         drop.classList.remove('drag');
-        if (e.dataTransfer.files[0]?.type.startsWith('audio/')) load(e.dataTransfer.files[0]);
-    };
-    fileInput.onchange = e => { if (e.target.files[0]) load(e.target.files[0]); };
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('audio/')) {
+            loadFile(file);
+        }
+    });
 
-    async function load(file) {
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files[0]) {
+            loadFile(e.target.files[0]);
+        }
+    });
+
+    async function loadFile(file) {
         fname.textContent = file.name;
         fname.classList.add('show');
         drop.classList.add('ready');
-        btn.disabled = false;
-
-        if (audio) { audio.pause(); audio = null; }
-        audio = new Audio(URL.createObjectURL(file));
-        audio.onplay = () => led.classList.add('on');
-        audio.onpause = () => led.classList.remove('on');
-        audio.onended = () => led.classList.remove('on');
+        led.classList.add('on');
 
         try {
-            ctx = new (window.AudioContext || window.webkitAudioContext)();
-            buffer = await ctx.decodeAudioData(await file.arrayBuffer());
-        } catch(e) {
-            fname.textContent = 'Error loading';
+            const ctx = initAudio();
+            const arrayBuffer = await file.arrayBuffer();
+            audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+            btn.disabled = false;
+        } catch (err) {
+            console.error('Error loading audio:', err);
+            fname.textContent = 'Error loading file';
             btn.disabled = true;
+            led.classList.remove('on');
         }
     }
 
-    // Analyze
-    btn.onclick = async () => {
-        if (!buffer) return;
+    // Analyze button
+    btn.addEventListener('click', async () => {
+        if (!audioBuffer) return;
+
         btn.classList.add('loading');
         btn.disabled = true;
         wave.classList.add('pulse');
         bpmBox.classList.remove('glow');
         keyBox.classList.remove('glow');
 
-        await new Promise(r => setTimeout(r, 300));
+        // Allow UI to update
+        await new Promise(r => setTimeout(r, 100));
 
-        const data = buffer.getChannelData(0);
-        const sr = buffer.sampleRate;
+        try {
+            const channelData = audioBuffer.getChannelData(0);
+            const sampleRate = audioBuffer.sampleRate;
 
-        const bpm = detectBPM(data, sr);
-        const key = detectKey(data, sr);
+            // Run detection
+            const bpm = detectBPM(channelData, sampleRate);
+            const keyResult = detectKey(channelData, sampleRate);
 
-        bpmEl.textContent = bpm;
-        keyEl.textContent = key.note;
-        scaleEl.textContent = key.mode;
-        confEl.textContent = key.conf + '%';
+            // Update UI
+            bpmEl.textContent = bpm;
+            keyEl.textContent = keyResult.note;
+            scaleEl.textContent = keyResult.mode;
+            confEl.textContent = keyResult.confidence + '%';
 
-        bpmBox.classList.add('glow');
-        keyBox.classList.add('glow');
-        highlight(key.note);
+            bpmBox.classList.add('glow');
+            keyBox.classList.add('glow');
+            highlightKey(keyResult.note);
+            
+        } catch (err) {
+            console.error('Analysis error:', err);
+            bpmEl.textContent = 'ERR';
+            keyEl.textContent = 'ERR';
+        }
 
         btn.classList.remove('loading');
         btn.disabled = false;
         wave.classList.remove('pulse');
-    };
-
-    // ============ ACCURATE BPM DETECTION ============
-    function detectBPM(data, sr) {
-        // Energy-based onset detection
-        const hop = 512;
-        const frameCount = Math.floor(data.length / hop);
-        const energy = new Float32Array(frameCount);
-
-        for (let i = 0; i < frameCount; i++) {
-            let sum = 0;
-            for (let j = 0; j < hop; j++) {
-                const idx = i * hop + j;
-                if (idx < data.length) sum += data[idx] * data[idx];
-            }
-            energy[i] = sum;
-        }
-
-        // Onset detection function
-        const onsets = new Float32Array(frameCount);
-        for (let i = 1; i < frameCount; i++) {
-            const diff = energy[i] - energy[i - 1];
-            onsets[i] = diff > 0 ? diff : 0;
-        }
-
-        // Normalize onsets
-        const maxOnset = Math.max(...onsets);
-        if (maxOnset > 0) {
-            for (let i = 0; i < onsets.length; i++) onsets[i] /= maxOnset;
-        }
-
-        // Autocorrelation for tempo
-        const minBPM = 60, maxBPM = 200;
-        const framesPerSec = sr / hop;
-        const minLag = Math.floor(framesPerSec * 60 / maxBPM);
-        const maxLag = Math.floor(framesPerSec * 60 / minBPM);
-        const analysisLen = Math.min(onsets.length, Math.floor(framesPerSec * 15)); // 15 sec
-
-        let bestLag = minLag;
-        let bestCorr = 0;
-
-        for (let lag = minLag; lag <= maxLag; lag++) {
-            let corr = 0;
-            for (let i = 0; i < analysisLen - lag; i++) {
-                corr += onsets[i] * onsets[i + lag];
-            }
-            
-            // Weight towards common tempos (90-150 BPM)
-            const bpm = (framesPerSec * 60) / lag;
-            if (bpm >= 85 && bpm <= 155) corr *= 1.15;
-            
-            if (corr > bestCorr) {
-                bestCorr = corr;
-                bestLag = lag;
-            }
-        }
-
-        let bpm = Math.round((framesPerSec * 60) / bestLag);
-
-        // Check half/double tempo
-        const halfLag = bestLag * 2;
-        const doubleLag = Math.floor(bestLag / 2);
-
-        if (halfLag <= maxLag) {
-            let halfCorr = 0;
-            for (let i = 0; i < analysisLen - halfLag; i++) {
-                halfCorr += onsets[i] * onsets[i + halfLag];
-            }
-            if (bpm > 150 && halfCorr > bestCorr * 0.7) {
-                bpm = Math.round(bpm / 2);
-            }
-        }
-
-        if (doubleLag >= minLag) {
-            let doubleCorr = 0;
-            for (let i = 0; i < analysisLen - doubleLag; i++) {
-                doubleCorr += onsets[i] * onsets[i + doubleLag];
-            }
-            if (bpm < 85 && doubleCorr > bestCorr * 0.7) {
-                bpm = Math.round(bpm * 2);
-            }
-        }
-
-        return Math.max(60, Math.min(200, bpm));
-    }
-
-    // ============ ACCURATE KEY DETECTION ============
-    function detectKey(data, sr) {
-        const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-
-        // Krumhansl-Schmuckler profiles
-        const majorProf = [6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88];
-        const minorProf = [6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17];
-
-        // Build chromagram using DFT
-        const chroma = new Float64Array(12);
-        const fftSize = 8192;
-        const hop = 4096;
-        const numFrames = Math.min(Math.floor((data.length - fftSize) / hop), 100);
-
-        // Reference frequencies for each pitch class (multiple octaves)
-        const refFreqs = [];
-        for (let oct = 2; oct <= 6; oct++) {
-            for (let pc = 0; pc < 12; pc++) {
-                const midi = 12 * (oct + 1) + pc;
-                refFreqs.push({ pc, freq: 440 * Math.pow(2, (midi - 69) / 12) });
-            }
-        }
-
-        for (let frame = 0; frame < numFrames; frame++) {
-            const start = frame * hop;
-            const segment = new Float32Array(fftSize);
-            
-            // Apply Hann window
-            for (let i = 0; i < fftSize; i++) {
-                const w = 0.5 * (1 - Math.cos(2 * Math.PI * i / (fftSize - 1)));
-                segment[i] = (data[start + i] || 0) * w;
-            }
-
-            // Goertzel for each reference frequency
-            for (const { pc, freq } of refFreqs) {
-                if (freq < 65 || freq > 2000) continue;
-
-                const k = Math.round(freq * fftSize / sr);
-                const w = 2 * Math.PI * k / fftSize;
-                const coeff = 2 * Math.cos(w);
-
-                let s1 = 0, s2 = 0;
-                for (let i = 0; i < fftSize; i++) {
-                    const s0 = segment[i] + coeff * s1 - s2;
-                    s2 = s1;
-                    s1 = s0;
-                }
-
-                const power = s1*s1 + s2*s2 - coeff*s1*s2;
-                chroma[pc] += Math.sqrt(Math.abs(power));
-            }
-        }
-
-        // Normalize chromagram
-        const maxC = Math.max(...chroma);
-        if (maxC > 0) {
-            for (let i = 0; i < 12; i++) chroma[i] /= maxC;
-        }
-
-        // Pearson correlation with profiles
-        const mean = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
-        
-        const corr = (x, y) => {
-            const mx = mean(x), my = mean(y);
-            let num = 0, dx = 0, dy = 0;
-            for (let i = 0; i < 12; i++) {
-                const a = x[i] - mx, b = y[i] - my;
-                num += a * b;
-                dx += a * a;
-                dy += b * b;
-            }
-            return num / (Math.sqrt(dx * dy) || 1);
-        };
-
-        let bestNote = 0, bestMode = 'Major', bestR = -2;
-
-        for (let shift = 0; shift < 12; shift++) {
-            const rotated = [];
-            for (let i = 0; i < 12; i++) {
-                rotated.push(chroma[(i + shift) % 12]);
-            }
-
-            const majR = corr(rotated, majorProf);
-            const minR = corr(rotated, minorProf);
-
-            if (majR > bestR) { bestR = majR; bestNote = shift; bestMode = 'Major'; }
-            if (minR > bestR) { bestR = minR; bestNote = shift; bestMode = 'Minor'; }
-        }
-
-        // Convert correlation (-1 to 1) to confidence (0-100)
-        const conf = Math.round(Math.max(0, Math.min(100, (bestR + 1) * 50)));
-
-        return { note: noteNames[bestNote], mode: bestMode, conf };
-    }
-
-    // Highlight key
-    function highlight(note) {
-        document.querySelectorAll('.wk, .bk').forEach(k => k.classList.remove('on'));
-        document.querySelectorAll(`[data-n="${note}"]`).forEach(k => k.classList.add('on'));
-    }
-
-    // Piano clicks
-    document.querySelectorAll('.wk, .bk:not(.hide)').forEach(k => {
-        k.onclick = e => {
-            e.stopPropagation();
-            highlight(k.dataset.n);
-            keyEl.textContent = k.dataset.n;
-        };
     });
+
+    // =============================================
+    // BPM DETECTION - Improved Algorithm
+    // =============================================
+    function detectBPM(data, sampleRate) {
+        // Parameters
+        const minBPM = 60;
+        const maxBPM = 200;
+        const resolution = 1;
+        
+        // Downsample for performance
+        const downsampleFactor = Math.floor(sampleRate / 4000);
+        const downsampled = [];
+        for (let i = 0; i < data.length; i += downsampleFactor) {
+            downsampled.push(Math.abs(data[i]));
+        }
+        const dsRate = sampleRate / downsampleFactor;
+        
+        // Low-pass filter using moving average
+        const filterSize = Math.floor(dsRate / 30);
+        const filtered = [];
+        for (let i = 0; i < downsampled.length; i++) {
+            let sum = 0;
+            let count = 0;
+            const start = Math.max(0, i - filterSize);
+            const end = Math.min(downsampled.length, i + filterSize);
+            for (let j = start; j < end; j++) {
+                sum += downsampled[j];
+                count++;
+            }
+            filtered.push(sum / count);
+        }
+        
+        // Compute onset strength (derivative)
+        const onset = [];
+        for (let i = 1; i < filtered.length; i++) {
+            const diff = filtered[i] - filtered[i - 1];
+            onset.push(diff > 0 ? diff * diff : 0);
+        }
+        
+        // Normalize onset
+        const maxOnset = Math.max(...onset);
+        if (maxOnset > 0) {
+            for (let i = 0; i < onset.length; i++) {
+                onset[i] /= maxOnset;
+            }
+        }
+        
+        // Compute autocorrelation for different tempo hypotheses
+        const results = [];
+        const analysisLength = Math.min(onset.length, Math.floor(dsRate * 20)); // 20 seconds
+        
+        for (let bpm = minBPM; bpm <= maxBPM; bpm += resolution) {
+            const beatInterval = (60 / bpm) * dsRate;
+            let score = 0;
+            
+            // Sum correlation at beat intervals
+            for (let multiple = 1; multiple <= 4; multiple++) {
+                const lag = Math.round(beatInterval * multiple);
+                if (lag >= analysisLength) break;
+                
+                let correlation = 0;
+                for (let i = 0; i < analysisLength - lag; i++) {
+                    correlation += onset[i] * onset[i + lag];
+                }
+                
+                // Weight lower multiples more heavily
+                score += correlation / multiple;
+            }
+            
+            results.push({ bpm, score });
+        }
+        
+        // Find best BPM
+        results.sort((a, b) => b.score - a.score);
+        
+        // Get top candidates and prefer tempos in common range
+        const topCandidates = results.slice(0, 10);
+        
+        // Prefer tempos between 80-160 (most common for music)
+        for (const candidate of topCandidates) {
+            if (candidate.bpm >= 80 && candidate.bpm <= 160) {
+                return candidate.bpm;
+            }
+        }
+        
+        // Fall back to best score
+        return results[0].bpm;
+    }
+
+    // =============================================
+    // KEY DETECTION - Krumhansl-Schmuckler Algorithm
+    // =============================================
+    function detectKey(data, sampleRate) {
+        const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+        
+        // Krumhansl-Schmuckler key profiles
+        const majorProfile = [6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88];
+        const minorProfile = [6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17];
+        
+        // Build chromagram using spectral analysis
+        const chromagram = new Float64Array(12);
+        const fftSize = 8192;
+        const hopSize = 4096;
+        const numFrames = Math.min(150, Math.floor((data.length - fftSize) / hopSize));
+        
+        // Hann window
+        const window = new Float32Array(fftSize);
+        for (let i = 0; i < fftSize; i++) {
+            window[i] = 0.5 * (1 - Math.cos(2 * Math.PI * i / (fftSize - 1)));
+        }
+        
+        // Process each frame
+        for (let frame = 0; frame < numFrames; frame++) {
+            const offset = frame * hopSize;
+            
+            // Apply window
+            const windowed = new Float32Array(fftSize);
+            for (let i = 0; i < fftSize; i++) {
+                windowed[i] = (data[offset + i] || 0) * window[i];
+            }
+            
+            // Simple DFT for pitch class frequencies
+            for (let pitchClass = 0; pitchClass < 12; pitchClass++) {
+                // Check multiple octaves (C2 to C6)
+                for (let octave = 2; octave <= 6; octave++) {
+                    const midiNote = 12 * (octave + 1) + pitchClass;
+                    const freq = 440 * Math.pow(2, (midiNote - 69) / 12);
+                    
+                    if (freq < 50 || freq > 2000) continue;
+                    
+                    // Goertzel algorithm for single frequency
+                    const k = Math.round(freq * fftSize / sampleRate);
+                    const omega = 2 * Math.PI * k / fftSize;
+                    const coeff = 2 * Math.cos(omega);
+                    
+                    let s0 = 0, s1 = 0, s2 = 0;
+                    for (let i = 0; i < fftSize; i++) {
+                        s0 = windowed[i] + coeff * s1 - s2;
+                        s2 = s1;
+                        s1 = s0;
+                    }
+                    
+                    const power = s1 * s1 + s2 * s2 - coeff * s1 * s2;
+                    chromagram[pitchClass] += Math.sqrt(Math.abs(power));
+                }
+            }
+        }
+        
+        // Normalize chromagram
+        const maxChroma = Math.max(...chromagram);
+        if (maxChroma > 0) {
+            for (let i = 0; i < 12; i++) {
+                chromagram[i] /= maxChroma;
+            }
+        }
+        
+        // Compute correlation with all keys
+        let bestNote = 0;
+        let bestMode = 'Major';
+        let bestCorrelation = -Infinity;
+        
+        // Pearson correlation function
+        function pearsonCorrelation(x, y) {
+            const n = x.length;
+            let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+            
+            for (let i = 0; i < n; i++) {
+                sumX += x[i];
+                sumY += y[i];
+                sumXY += x[i] * y[i];
+                sumX2 += x[i] * x[i];
+                sumY2 += y[i] * y[i];
+            }
+            
+            const numerator = n * sumXY - sumX * sumY;
+            const denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+            
+            return denominator === 0 ? 0 : numerator / denominator;
+        }
+        
+        // Test all keys
+        for (let shift = 0; shift < 12; shift++) {
+            // Rotate chromagram to test this root
+            const rotated = new Float64Array(12);
+            for (let i = 0; i < 12; i++) {
+                rotated[i] = chromagram[(i + shift) % 12];
+            }
+            
+            // Test major
+            const majorCorr = pearsonCorrelation(Array.from(rotated), majorProfile);
+            if (majorCorr > bestCorrelation) {
+                bestCorrelation = majorCorr;
+                bestNote = shift;
+                bestMode = 'Major';
+            }
+            
+            // Test minor
+            const minorCorr = pearsonCorrelation(Array.from(rotated), minorProfile);
+            if (minorCorr > bestCorrelation) {
+                bestCorrelation = minorCorr;
+                bestNote = shift;
+                bestMode = 'Minor';
+            }
+        }
+        
+        // Convert correlation to confidence (0-100%)
+        // Correlation ranges from -1 to 1, typical good matches are 0.5-0.9
+        const confidence = Math.round(Math.max(0, Math.min(100, (bestCorrelation + 1) * 50)));
+        
+        return {
+            note: noteNames[bestNote],
+            mode: bestMode,
+            confidence: confidence
+        };
+    }
+
 })();
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>
