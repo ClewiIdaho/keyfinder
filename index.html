@@ -25,6 +25,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 8px;
         }
 
         .app {
@@ -34,14 +35,14 @@
             
             width: 100%;
             height: 100%;
-            max-width: 320px;
-            max-height: 520px;
+            max-width: 340px;
+            max-height: 560px;
             background: linear-gradient(145deg, rgba(25, 30, 45, 0.95), rgba(15, 20, 35, 0.98));
-            border-radius: 16px;
-            padding: 16px;
+            border-radius: 18px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
             overflow: hidden;
@@ -57,7 +58,7 @@
             height: 40%;
             background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%);
             pointer-events: none;
-            border-radius: 16px 16px 0 0;
+            border-radius: 18px 18px 0 0;
         }
 
         .header {
@@ -85,6 +86,12 @@
         .led.on {
             background: var(--accent);
             box-shadow: 0 0 6px var(--glow), 0 0 12px var(--glow);
+            animation: ledPulse 2s infinite;
+        }
+
+        @keyframes ledPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
         }
 
         .brand-name {
@@ -165,12 +172,17 @@
             background: rgba(0, 0, 0, 0.25);
             border: 2px dashed rgba(255, 255, 255, 0.12);
             border-radius: 12px;
-            padding: 20px 16px;
+            padding: 16px;
             text-align: center;
             cursor: pointer;
             transition: all 0.2s;
             position: relative;
             z-index: 1;
+            min-height: 90px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .upload:hover, .upload.drag {
@@ -181,19 +193,30 @@
         .upload.ready {
             border-style: solid;
             border-color: var(--accent);
+            padding: 12px;
         }
 
-        .wave {
+        .upload-default {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .upload.ready .upload-default {
+            display: none;
+        }
+
+        .wave-icon {
             color: var(--accent);
             margin-bottom: 8px;
         }
 
-        .wave svg {
+        .wave-icon svg {
             width: 48px;
             height: 24px;
         }
 
-        .wave.pulse svg {
+        .wave-icon.pulse svg {
             animation: pulse 1s infinite;
         }
 
@@ -207,18 +230,46 @@
             color: rgba(255, 255, 255, 0.5);
         }
 
-        .file-name {
-            font-size: 11px;
-            color: var(--accent);
-            margin-top: 8px;
-            font-weight: 500;
+        /* Waveform Display */
+        .waveform-container {
             display: none;
+            width: 100%;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .upload.ready .waveform-container {
+            display: flex;
+        }
+
+        .waveform-canvas {
+            width: 100%;
+            height: 50px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .file-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .file-name {
+            font-size: 10px;
+            color: var(--accent);
+            font-weight: 500;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            max-width: 70%;
         }
 
-        .file-name.show { display: block; }
+        .file-duration {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.4);
+        }
 
         input[type="file"] { display: none; }
 
@@ -236,11 +287,12 @@
             padding: 14px 10px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: all 0.3s;
         }
 
         .result.glow {
-            border-color: rgba(34, 197, 94, 0.2);
-            box-shadow: 0 0 16px rgba(34, 197, 94, 0.08);
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.15);
         }
 
         .result-label {
@@ -294,6 +346,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            min-height: 80px;
         }
 
         .piano-label {
@@ -314,7 +367,7 @@
 
         .piano {
             position: relative;
-            height: 56px;
+            height: 52px;
             display: inline-block;
         }
 
@@ -325,8 +378,8 @@
         }
 
         .wk {
-            width: 28px;
-            height: 56px;
+            width: 26px;
+            height: 52px;
             background: linear-gradient(180deg, #f8f8f8, #ddd);
             border-radius: 0 0 4px 4px;
             cursor: pointer;
@@ -339,10 +392,7 @@
 
         .wk:hover { background: linear-gradient(180deg, #fff, #eee); }
         
-        .wk:active { 
-            background: linear-gradient(180deg, #e0e0e0, #ccc); 
-            transform: translateY(1px);
-        }
+        .wk:active { transform: translateY(1px); }
 
         .wk.on {
             background: linear-gradient(180deg, var(--accent), var(--accent-dark)) !important;
@@ -352,10 +402,10 @@
 
         .wk span {
             position: absolute;
-            bottom: 4px;
+            bottom: 3px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 8px;
+            font-size: 7px;
             font-weight: 600;
             color: #777;
             pointer-events: none;
@@ -368,15 +418,15 @@
             top: 0;
             left: 0;
             width: 100%;
-            height: 34px;
+            height: 32px;
             display: flex;
             justify-content: flex-start;
-            padding-left: 19px;
+            padding-left: 17px;
         }
 
         .bk {
-            width: 18px;
-            height: 34px;
+            width: 16px;
+            height: 32px;
             background: linear-gradient(180deg, #3a3a3a, #1a1a1a);
             border-radius: 0 0 3px 3px;
             cursor: pointer;
@@ -386,15 +436,10 @@
             flex-shrink: 0;
         }
 
-        .bk:nth-child(2) { margin-right: 42px; }
+        .bk:nth-child(2) { margin-right: 40px; }
         .bk:nth-child(5) { margin-right: 0; }
 
         .bk:hover { background: linear-gradient(180deg, #4a4a4a, #2a2a2a); }
-        
-        .bk:active { 
-            background: linear-gradient(180deg, #2a2a2a, #111); 
-            height: 32px;
-        }
 
         .bk.on {
             background: linear-gradient(180deg, var(--accent-dark), #0a4020) !important;
@@ -405,7 +450,7 @@
             background: linear-gradient(135deg, var(--accent), var(--accent-dark));
             border: none;
             border-radius: 12px;
-            padding: 14px;
+            padding: 16px;
             font-size: 14px;
             font-weight: 600;
             color: #fff;
@@ -419,6 +464,7 @@
             position: relative;
             z-index: 1;
             box-shadow: 0 4px 12px var(--glow);
+            flex-shrink: 0;
         }
 
         .btn:hover:not(:disabled) {
@@ -447,16 +493,6 @@
         .btn.loading .btn-content { display: none; }
 
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        .audio-ctx {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-        }
     </style>
 </head>
 <body>
@@ -485,25 +521,33 @@
         </div>
 
         <div class="upload" id="drop">
-            <div class="wave" id="wave">
-                <svg viewBox="0 0 48 24"><path d="M1,12 Q6,3 12,12 T24,12 T36,12 T47,12" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round"/></svg>
+            <div class="upload-default">
+                <div class="wave-icon" id="waveIcon">
+                    <svg viewBox="0 0 48 24"><path d="M1,12 Q6,3 12,12 T24,12 T36,12 T47,12" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <div class="upload-text">Click or drop audio file</div>
             </div>
-            <div class="upload-text">Click or drop audio file</div>
-            <div class="file-name" id="fname"></div>
-            <input type="file" id="file" accept="audio/*">
+            <div class="waveform-container">
+                <canvas class="waveform-canvas" id="waveformCanvas"></canvas>
+                <div class="file-info">
+                    <span class="file-name" id="fileName"></span>
+                    <span class="file-duration" id="fileDuration"></span>
+                </div>
+            </div>
+            <input type="file" id="fileInput" accept="audio/*">
         </div>
 
         <div class="results">
             <div class="result" id="bpmBox">
                 <div class="result-label">BPM</div>
-                <div class="result-value" id="bpm">---</div>
+                <div class="result-value" id="bpmValue">---</div>
             </div>
             <div class="result" id="keyBox">
                 <div class="result-label">Key</div>
-                <div class="result-value accent" id="key">--</div>
+                <div class="result-value accent" id="keyValue">--</div>
                 <div class="result-meta">
-                    <span class="scale" id="scale">Major</span>
-                    <span class="conf" id="conf">--%</span>
+                    <span class="scale" id="scaleValue">Major</span>
+                    <span class="conf" id="confValue">--%</span>
                 </div>
             </div>
         </div>
@@ -532,7 +576,7 @@
             </div>
         </div>
 
-        <button class="btn" id="analyze" disabled>
+        <button class="btn" id="analyzeBtn" disabled>
             <span class="btn-content">🎵 Analyze Track</span>
             <div class="spin"></div>
         </button>
@@ -542,8 +586,8 @@
 (function() {
     'use strict';
 
-    // Color themes
-    const colors = {
+    // Colors
+    var colors = {
         green:  { a: '#22c55e', d: '#15803d', g: 'rgba(34,197,94,0.5)' },
         blue:   { a: '#3b82f6', d: '#1d4ed8', g: 'rgba(59,130,246,0.5)' },
         purple: { a: '#a855f7', d: '#7e22ce', g: 'rgba(168,85,247,0.5)' },
@@ -552,404 +596,520 @@
         cyan:   { a: '#06b6d4', d: '#0e7490', g: 'rgba(6,182,212,0.5)' }
     };
 
-    // Note frequencies for piano sound
-    const noteFreqs = {
+    var noteFreqs = {
         'C': 261.63, 'C#': 277.18, 'D': 293.66, 'D#': 311.13,
         'E': 329.63, 'F': 349.23, 'F#': 369.99, 'G': 392.00,
         'G#': 415.30, 'A': 440.00, 'A#': 466.16, 'B': 493.88
     };
 
     // Elements
-    const app = document.querySelector('.app');
-    const led = document.getElementById('led');
-    const drop = document.getElementById('drop');
-    const fileInput = document.getElementById('file');
-    const fname = document.getElementById('fname');
-    const wave = document.getElementById('wave');
-    const bpmEl = document.getElementById('bpm');
-    const bpmBox = document.getElementById('bpmBox');
-    const keyEl = document.getElementById('key');
-    const keyBox = document.getElementById('keyBox');
-    const scaleEl = document.getElementById('scale');
-    const confEl = document.getElementById('conf');
-    const btn = document.getElementById('analyze');
-    const piano = document.getElementById('piano');
+    var app = document.querySelector('.app');
+    var led = document.getElementById('led');
+    var drop = document.getElementById('drop');
+    var fileInput = document.getElementById('fileInput');
+    var fileName = document.getElementById('fileName');
+    var fileDuration = document.getElementById('fileDuration');
+    var waveIcon = document.getElementById('waveIcon');
+    var waveformCanvas = document.getElementById('waveformCanvas');
+    var bpmValue = document.getElementById('bpmValue');
+    var bpmBox = document.getElementById('bpmBox');
+    var keyValue = document.getElementById('keyValue');
+    var keyBox = document.getElementById('keyBox');
+    var scaleValue = document.getElementById('scaleValue');
+    var confValue = document.getElementById('confValue');
+    var analyzeBtn = document.getElementById('analyzeBtn');
+    var piano = document.getElementById('piano');
 
-    let audioBuffer = null;
-    let audioCtx = null;
+    var audioBuffer = null;
+    var audioCtx = null;
+    var currentColor = 'green';
 
-    // Initialize audio context on user interaction
-    function initAudio() {
+    // Get audio context
+    function getAudioCtx() {
         if (!audioCtx) {
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
         }
         return audioCtx;
     }
 
     // Theme switching
-    document.querySelectorAll('.theme').forEach(t => {
-        t.addEventListener('click', () => {
-            document.querySelectorAll('.theme').forEach(x => x.classList.remove('active'));
+    var themes = document.querySelectorAll('.theme');
+    for (var i = 0; i < themes.length; i++) {
+        themes[i].addEventListener('click', function(e) {
+            var t = e.currentTarget;
+            for (var j = 0; j < themes.length; j++) {
+                themes[j].classList.remove('active');
+            }
             t.classList.add('active');
-            const c = colors[t.dataset.c];
+            currentColor = t.dataset.c;
+            var c = colors[currentColor];
             app.style.setProperty('--accent', c.a);
             app.style.setProperty('--accent-dark', c.d);
             app.style.setProperty('--glow', c.g);
+            if (audioBuffer) {
+                drawWaveform(audioBuffer);
+            }
         });
-    });
-
-    // Tab switching
-    document.querySelectorAll('.tab').forEach(t => {
-        t.addEventListener('click', () => {
-            document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-            t.classList.add('active');
-        });
-    });
-
-    // Piano key functionality
-    function playNote(note) {
-        const ctx = initAudio();
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        
-        osc.type = 'sine';
-        osc.frequency.value = noteFreqs[note];
-        
-        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
-        
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.5);
     }
 
+    // Tab switching
+    var tabs = document.querySelectorAll('.tab');
+    for (var i = 0; i < tabs.length; i++) {
+        tabs[i].addEventListener('click', function(e) {
+            for (var j = 0; j < tabs.length; j++) {
+                tabs[j].classList.remove('active');
+            }
+            e.currentTarget.classList.add('active');
+        });
+    }
+
+    // Play note
+    function playNote(note) {
+        try {
+            var ctx = getAudioCtx();
+            var osc = ctx.createOscillator();
+            var gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.value = noteFreqs[note];
+            gain.gain.setValueAtTime(0.15, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.3);
+        } catch(e) {}
+    }
+
+    // Highlight key
     function highlightKey(note) {
-        document.querySelectorAll('.wk, .bk').forEach(k => k.classList.remove('on'));
-        const key = document.querySelector(`[data-note="${note}"]`);
+        var keys = document.querySelectorAll('.wk, .bk');
+        for (var i = 0; i < keys.length; i++) {
+            keys[i].classList.remove('on');
+        }
+        var key = document.querySelector('[data-note="' + note + '"]');
         if (key) key.classList.add('on');
     }
 
-    // Piano click handlers
-    piano.addEventListener('click', (e) => {
-        const key = e.target.closest('[data-note]');
+    // Piano clicks
+    piano.addEventListener('click', function(e) {
+        var key = e.target.closest('[data-note]');
         if (key) {
-            const note = key.dataset.note;
+            var note = key.dataset.note;
             highlightKey(note);
             playNote(note);
-            keyEl.textContent = note;
+            keyValue.textContent = note;
         }
     });
 
-    // Upload handlers
-    drop.addEventListener('click', () => fileInput.click());
+    // Upload events
+    drop.addEventListener('click', function(e) {
+        if (e.target === fileInput) return;
+        fileInput.click();
+    });
 
-    drop.addEventListener('dragover', (e) => {
+    drop.addEventListener('dragover', function(e) {
         e.preventDefault();
         drop.classList.add('drag');
     });
 
-    drop.addEventListener('dragleave', () => {
-        drop.classList.remove('drag');
-    });
-
-    drop.addEventListener('drop', (e) => {
+    drop.addEventListener('dragleave', function(e) {
         e.preventDefault();
         drop.classList.remove('drag');
-        const file = e.dataTransfer.files[0];
-        if (file && file.type.startsWith('audio/')) {
-            loadFile(file);
+    });
+
+    drop.addEventListener('drop', function(e) {
+        e.preventDefault();
+        drop.classList.remove('drag');
+        var file = e.dataTransfer.files[0];
+        if (file && file.type.indexOf('audio') > -1) {
+            loadAudio(file);
         }
     });
 
-    fileInput.addEventListener('change', (e) => {
+    fileInput.addEventListener('change', function(e) {
         if (e.target.files[0]) {
-            loadFile(e.target.files[0]);
+            loadAudio(e.target.files[0]);
         }
     });
 
-    async function loadFile(file) {
-        fname.textContent = file.name;
-        fname.classList.add('show');
-        drop.classList.add('ready');
-        led.classList.add('on');
+    // Format time
+    function formatTime(seconds) {
+        var mins = Math.floor(seconds / 60);
+        var secs = Math.floor(seconds % 60);
+        return mins + ':' + (secs < 10 ? '0' : '') + secs;
+    }
 
-        try {
-            const ctx = initAudio();
-            const arrayBuffer = await file.arrayBuffer();
-            audioBuffer = await ctx.decodeAudioData(arrayBuffer);
-            btn.disabled = false;
-        } catch (err) {
-            console.error('Error loading audio:', err);
-            fname.textContent = 'Error loading file';
-            btn.disabled = true;
-            led.classList.remove('on');
+    // Draw waveform
+    function drawWaveform(buffer) {
+        var canvas = waveformCanvas;
+        var ctx = canvas.getContext('2d');
+        var dpr = window.devicePixelRatio || 1;
+        
+        canvas.width = canvas.offsetWidth * dpr;
+        canvas.height = canvas.offsetHeight * dpr;
+        ctx.scale(dpr, dpr);
+        
+        var width = canvas.offsetWidth;
+        var height = canvas.offsetHeight;
+        var data = buffer.getChannelData(0);
+        var step = Math.ceil(data.length / width);
+        var amp = height / 2;
+
+        ctx.clearRect(0, 0, width, height);
+
+        // Background gradient
+        var bgGrad = ctx.createLinearGradient(0, 0, 0, height);
+        bgGrad.addColorStop(0, 'rgba(0,0,0,0.2)');
+        bgGrad.addColorStop(1, 'rgba(0,0,0,0.4)');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, width, height);
+
+        // Waveform gradient
+        var c = colors[currentColor];
+        var grad = ctx.createLinearGradient(0, 0, 0, height);
+        grad.addColorStop(0, c.a);
+        grad.addColorStop(0.5, c.d);
+        grad.addColorStop(1, c.a);
+
+        ctx.beginPath();
+        ctx.moveTo(0, amp);
+
+        for (var i = 0; i < width; i++) {
+            var min = 1.0;
+            var max = -1.0;
+            for (var j = 0; j < step; j++) {
+                var idx = (i * step) + j;
+                if (idx < data.length) {
+                    var val = data[idx];
+                    if (val < min) min = val;
+                    if (val > max) max = val;
+                }
+            }
+            var yMin = (1 + min) * amp;
+            var yMax = (1 + max) * amp;
+            ctx.lineTo(i, yMin);
         }
+
+        for (var i = width - 1; i >= 0; i--) {
+            var min = 1.0;
+            var max = -1.0;
+            for (var j = 0; j < step; j++) {
+                var idx = (i * step) + j;
+                if (idx < data.length) {
+                    var val = data[idx];
+                    if (val < min) min = val;
+                    if (val > max) max = val;
+                }
+            }
+            var yMax = (1 + max) * amp;
+            ctx.lineTo(i, yMax);
+        }
+
+        ctx.closePath();
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // Center line
+        ctx.beginPath();
+        ctx.moveTo(0, amp);
+        ctx.lineTo(width, amp);
+        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+
+    // Load audio
+    function loadAudio(file) {
+        fileName.textContent = file.name;
+        led.classList.add('on');
+        analyzeBtn.disabled = true;
+
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            var ctx = getAudioCtx();
+            ctx.decodeAudioData(e.target.result, function(buffer) {
+                audioBuffer = buffer;
+                fileDuration.textContent = formatTime(buffer.duration);
+                drop.classList.add('ready');
+                drawWaveform(buffer);
+                analyzeBtn.disabled = false;
+            }, function(err) {
+                console.error('Decode error:', err);
+                fileName.textContent = 'Error loading file';
+                led.classList.remove('on');
+            });
+        };
+        reader.onerror = function() {
+            fileName.textContent = 'Error reading file';
+            led.classList.remove('on');
+        };
+        reader.readAsArrayBuffer(file);
     }
 
     // Analyze button
-    btn.addEventListener('click', async () => {
+    analyzeBtn.addEventListener('click', function() {
         if (!audioBuffer) return;
 
-        btn.classList.add('loading');
-        btn.disabled = true;
-        wave.classList.add('pulse');
+        analyzeBtn.classList.add('loading');
+        analyzeBtn.disabled = true;
+        waveIcon.classList.add('pulse');
         bpmBox.classList.remove('glow');
         keyBox.classList.remove('glow');
 
-        // Allow UI to update
-        await new Promise(r => setTimeout(r, 100));
+        setTimeout(function() {
+            var samples = audioBuffer.getChannelData(0);
+            var sampleRate = audioBuffer.sampleRate;
 
-        try {
-            const channelData = audioBuffer.getChannelData(0);
-            const sampleRate = audioBuffer.sampleRate;
+            var bpm = detectBPM(samples, sampleRate);
+            var keyResult = detectKey(samples, sampleRate);
 
-            // Run detection
-            const bpm = detectBPM(channelData, sampleRate);
-            const keyResult = detectKey(channelData, sampleRate);
-
-            // Update UI
-            bpmEl.textContent = bpm;
-            keyEl.textContent = keyResult.note;
-            scaleEl.textContent = keyResult.mode;
-            confEl.textContent = keyResult.confidence + '%';
+            bpmValue.textContent = bpm;
+            keyValue.textContent = keyResult.note;
+            scaleValue.textContent = keyResult.mode;
+            confValue.textContent = keyResult.confidence + '%';
 
             bpmBox.classList.add('glow');
             keyBox.classList.add('glow');
             highlightKey(keyResult.note);
-            
-        } catch (err) {
-            console.error('Analysis error:', err);
-            bpmEl.textContent = 'ERR';
-            keyEl.textContent = 'ERR';
-        }
 
-        btn.classList.remove('loading');
-        btn.disabled = false;
-        wave.classList.remove('pulse');
+            analyzeBtn.classList.remove('loading');
+            analyzeBtn.disabled = false;
+            waveIcon.classList.remove('pulse');
+        }, 300);
     });
 
     // =============================================
-    // BPM DETECTION - Improved Algorithm
+    // BPM DETECTION
     // =============================================
-    function detectBPM(data, sampleRate) {
-        // Parameters
-        const minBPM = 60;
-        const maxBPM = 200;
-        const resolution = 1;
+    function detectBPM(samples, sampleRate) {
+        // Limit analysis to 30 seconds
+        var maxSamples = Math.min(samples.length, sampleRate * 30);
         
         // Downsample for performance
-        const downsampleFactor = Math.floor(sampleRate / 4000);
-        const downsampled = [];
-        for (let i = 0; i < data.length; i += downsampleFactor) {
-            downsampled.push(Math.abs(data[i]));
+        var downRate = 8;
+        var downsampled = [];
+        for (var i = 0; i < maxSamples; i += downRate) {
+            downsampled.push(Math.abs(samples[i]));
         }
-        const dsRate = sampleRate / downsampleFactor;
-        
-        // Low-pass filter using moving average
-        const filterSize = Math.floor(dsRate / 30);
-        const filtered = [];
-        for (let i = 0; i < downsampled.length; i++) {
-            let sum = 0;
-            let count = 0;
-            const start = Math.max(0, i - filterSize);
-            const end = Math.min(downsampled.length, i + filterSize);
-            for (let j = start; j < end; j++) {
+        var dsRate = sampleRate / downRate;
+
+        // Low-pass filter
+        var filtered = [];
+        var windowSize = Math.floor(dsRate / 15);
+        for (var i = 0; i < downsampled.length; i++) {
+            var sum = 0;
+            var count = 0;
+            var start = Math.max(0, i - windowSize);
+            var end = Math.min(downsampled.length, i + windowSize + 1);
+            for (var j = start; j < end; j++) {
                 sum += downsampled[j];
                 count++;
             }
             filtered.push(sum / count);
         }
-        
-        // Compute onset strength (derivative)
-        const onset = [];
-        for (let i = 1; i < filtered.length; i++) {
-            const diff = filtered[i] - filtered[i - 1];
-            onset.push(diff > 0 ? diff * diff : 0);
+
+        // Peak detection
+        var threshold = 0;
+        for (var i = 0; i < filtered.length; i++) {
+            threshold += filtered[i];
         }
-        
-        // Normalize onset
-        const maxOnset = Math.max(...onset);
-        if (maxOnset > 0) {
-            for (let i = 0; i < onset.length; i++) {
-                onset[i] /= maxOnset;
+        threshold = (threshold / filtered.length) * 1.2;
+
+        var peaks = [];
+        var minPeakDistance = Math.floor(dsRate * 0.3); // 300ms minimum
+        var lastPeak = -minPeakDistance;
+
+        for (var i = 1; i < filtered.length - 1; i++) {
+            if (filtered[i] > threshold && 
+                filtered[i] > filtered[i-1] && 
+                filtered[i] > filtered[i+1] &&
+                i - lastPeak > minPeakDistance) {
+                peaks.push(i);
+                lastPeak = i;
             }
         }
-        
-        // Compute autocorrelation for different tempo hypotheses
-        const results = [];
-        const analysisLength = Math.min(onset.length, Math.floor(dsRate * 20)); // 20 seconds
-        
-        for (let bpm = minBPM; bpm <= maxBPM; bpm += resolution) {
-            const beatInterval = (60 / bpm) * dsRate;
-            let score = 0;
-            
-            // Sum correlation at beat intervals
-            for (let multiple = 1; multiple <= 4; multiple++) {
-                const lag = Math.round(beatInterval * multiple);
-                if (lag >= analysisLength) break;
-                
-                let correlation = 0;
-                for (let i = 0; i < analysisLength - lag; i++) {
-                    correlation += onset[i] * onset[i + lag];
-                }
-                
-                // Weight lower multiples more heavily
-                score += correlation / multiple;
-            }
-            
-            results.push({ bpm, score });
+
+        if (peaks.length < 4) {
+            // Fallback: use autocorrelation
+            return detectBPMAutocorrelation(filtered, dsRate);
         }
-        
-        // Find best BPM
-        results.sort((a, b) => b.score - a.score);
-        
-        // Get top candidates and prefer tempos in common range
-        const topCandidates = results.slice(0, 10);
-        
-        // Prefer tempos between 80-160 (most common for music)
-        for (const candidate of topCandidates) {
-            if (candidate.bpm >= 80 && candidate.bpm <= 160) {
-                return candidate.bpm;
+
+        // Calculate intervals
+        var intervals = [];
+        for (var i = 1; i < peaks.length; i++) {
+            intervals.push(peaks[i] - peaks[i-1]);
+        }
+
+        // Find most common interval (histogram approach)
+        var histogram = {};
+        for (var i = 0; i < intervals.length; i++) {
+            var bpm = Math.round((60 * dsRate) / intervals[i]);
+            // Normalize to 60-200 range
+            while (bpm > 200) bpm = Math.round(bpm / 2);
+            while (bpm < 60) bpm = bpm * 2;
+            bpm = Math.round(bpm);
+            histogram[bpm] = (histogram[bpm] || 0) + 1;
+        }
+
+        // Find most common BPM
+        var bestBPM = 120;
+        var bestCount = 0;
+        for (var bpm in histogram) {
+            if (histogram[bpm] > bestCount) {
+                bestCount = histogram[bpm];
+                bestBPM = parseInt(bpm);
             }
         }
-        
-        // Fall back to best score
-        return results[0].bpm;
+
+        return bestBPM;
+    }
+
+    function detectBPMAutocorrelation(data, sampleRate) {
+        var minBPM = 60;
+        var maxBPM = 200;
+        var minLag = Math.floor((60 / maxBPM) * sampleRate);
+        var maxLag = Math.floor((60 / minBPM) * sampleRate);
+        var analysisLen = Math.min(data.length, Math.floor(sampleRate * 10));
+
+        var bestLag = minLag;
+        var bestCorr = 0;
+
+        for (var lag = minLag; lag <= maxLag; lag += 2) {
+            var corr = 0;
+            for (var i = 0; i < analysisLen - lag; i++) {
+                corr += data[i] * data[i + lag];
+            }
+            if (corr > bestCorr) {
+                bestCorr = corr;
+                bestLag = lag;
+            }
+        }
+
+        var bpm = Math.round((60 * sampleRate) / bestLag);
+        while (bpm > 200) bpm = Math.round(bpm / 2);
+        while (bpm < 60) bpm = bpm * 2;
+
+        return Math.round(bpm);
     }
 
     // =============================================
-    // KEY DETECTION - Krumhansl-Schmuckler Algorithm
+    // KEY DETECTION
     // =============================================
-    function detectKey(data, sampleRate) {
-        const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    function detectKey(samples, sampleRate) {
+        var noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
         
-        // Krumhansl-Schmuckler key profiles
-        const majorProfile = [6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88];
-        const minorProfile = [6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17];
-        
-        // Build chromagram using spectral analysis
-        const chromagram = new Float64Array(12);
-        const fftSize = 8192;
-        const hopSize = 4096;
-        const numFrames = Math.min(150, Math.floor((data.length - fftSize) / hopSize));
-        
-        // Hann window
-        const window = new Float32Array(fftSize);
-        for (let i = 0; i < fftSize; i++) {
-            window[i] = 0.5 * (1 - Math.cos(2 * Math.PI * i / (fftSize - 1)));
-        }
-        
-        // Process each frame
-        for (let frame = 0; frame < numFrames; frame++) {
-            const offset = frame * hopSize;
+        // Krumhansl-Schmuckler profiles
+        var majorProfile = [6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88];
+        var minorProfile = [6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17];
+
+        // Build chromagram
+        var chromagram = [0,0,0,0,0,0,0,0,0,0,0,0];
+        var fftSize = 4096;
+        var hopSize = 2048;
+        var maxSamples = Math.min(samples.length, sampleRate * 30);
+        var numFrames = Math.floor((maxSamples - fftSize) / hopSize);
+        numFrames = Math.min(numFrames, 100);
+
+        // Simple spectral analysis using correlation
+        for (var frame = 0; frame < numFrames; frame++) {
+            var offset = frame * hopSize;
             
-            // Apply window
-            const windowed = new Float32Array(fftSize);
-            for (let i = 0; i < fftSize; i++) {
-                windowed[i] = (data[offset + i] || 0) * window[i];
-            }
-            
-            // Simple DFT for pitch class frequencies
-            for (let pitchClass = 0; pitchClass < 12; pitchClass++) {
-                // Check multiple octaves (C2 to C6)
-                for (let octave = 2; octave <= 6; octave++) {
-                    const midiNote = 12 * (octave + 1) + pitchClass;
-                    const freq = 440 * Math.pow(2, (midiNote - 69) / 12);
+            for (var pitchClass = 0; pitchClass < 12; pitchClass++) {
+                for (var octave = 2; octave <= 6; octave++) {
+                    var midi = 12 * (octave + 1) + pitchClass;
+                    var freq = 440 * Math.pow(2, (midi - 69) / 12);
                     
-                    if (freq < 50 || freq > 2000) continue;
+                    if (freq < 60 || freq > 2000) continue;
                     
-                    // Goertzel algorithm for single frequency
-                    const k = Math.round(freq * fftSize / sampleRate);
-                    const omega = 2 * Math.PI * k / fftSize;
-                    const coeff = 2 * Math.cos(omega);
+                    var period = sampleRate / freq;
+                    var energy = 0;
+                    var count = Math.min(500, fftSize - Math.ceil(period));
                     
-                    let s0 = 0, s1 = 0, s2 = 0;
-                    for (let i = 0; i < fftSize; i++) {
-                        s0 = windowed[i] + coeff * s1 - s2;
-                        s2 = s1;
-                        s1 = s0;
+                    for (var i = 0; i < count; i++) {
+                        var idx = offset + i;
+                        var idx2 = offset + i + Math.round(period);
+                        if (idx2 < samples.length) {
+                            energy += samples[idx] * samples[idx2];
+                        }
                     }
                     
-                    const power = s1 * s1 + s2 * s2 - coeff * s1 * s2;
-                    chromagram[pitchClass] += Math.sqrt(Math.abs(power));
+                    chromagram[pitchClass] += Math.max(0, energy);
                 }
             }
         }
-        
-        // Normalize chromagram
-        const maxChroma = Math.max(...chromagram);
+
+        // Normalize
+        var maxChroma = 0;
+        for (var i = 0; i < 12; i++) {
+            if (chromagram[i] > maxChroma) maxChroma = chromagram[i];
+        }
         if (maxChroma > 0) {
-            for (let i = 0; i < 12; i++) {
+            for (var i = 0; i < 12; i++) {
                 chromagram[i] /= maxChroma;
             }
         }
-        
-        // Compute correlation with all keys
-        let bestNote = 0;
-        let bestMode = 'Major';
-        let bestCorrelation = -Infinity;
-        
-        // Pearson correlation function
-        function pearsonCorrelation(x, y) {
-            const n = x.length;
-            let sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
-            
-            for (let i = 0; i < n; i++) {
-                sumX += x[i];
-                sumY += y[i];
-                sumXY += x[i] * y[i];
-                sumX2 += x[i] * x[i];
-                sumY2 += y[i] * y[i];
+
+        // Find best key using correlation
+        var bestKey = 0;
+        var bestMode = 'Major';
+        var bestCorr = -999;
+
+        for (var key = 0; key < 12; key++) {
+            // Rotate chromagram
+            var rotated = [];
+            for (var i = 0; i < 12; i++) {
+                rotated.push(chromagram[(i + key) % 12]);
             }
-            
-            const numerator = n * sumXY - sumX * sumY;
-            const denominator = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
-            
-            return denominator === 0 ? 0 : numerator / denominator;
-        }
-        
-        // Test all keys
-        for (let shift = 0; shift < 12; shift++) {
-            // Rotate chromagram to test this root
-            const rotated = new Float64Array(12);
-            for (let i = 0; i < 12; i++) {
-                rotated[i] = chromagram[(i + shift) % 12];
-            }
-            
-            // Test major
-            const majorCorr = pearsonCorrelation(Array.from(rotated), majorProfile);
-            if (majorCorr > bestCorrelation) {
-                bestCorrelation = majorCorr;
-                bestNote = shift;
+
+            // Correlate with major
+            var majorCorr = correlate(rotated, majorProfile);
+            if (majorCorr > bestCorr) {
+                bestCorr = majorCorr;
+                bestKey = key;
                 bestMode = 'Major';
             }
-            
-            // Test minor
-            const minorCorr = pearsonCorrelation(Array.from(rotated), minorProfile);
-            if (minorCorr > bestCorrelation) {
-                bestCorrelation = minorCorr;
-                bestNote = shift;
+
+            // Correlate with minor
+            var minorCorr = correlate(rotated, minorProfile);
+            if (minorCorr > bestCorr) {
+                bestCorr = minorCorr;
+                bestKey = key;
                 bestMode = 'Minor';
             }
         }
-        
-        // Convert correlation to confidence (0-100%)
-        // Correlation ranges from -1 to 1, typical good matches are 0.5-0.9
-        const confidence = Math.round(Math.max(0, Math.min(100, (bestCorrelation + 1) * 50)));
-        
+
+        // Calculate confidence
+        var confidence = Math.round(Math.max(50, Math.min(98, (bestCorr + 1) * 50)));
+
         return {
-            note: noteNames[bestNote],
+            note: noteNames[bestKey],
             mode: bestMode,
             confidence: confidence
         };
     }
 
+    function correlate(x, y) {
+        var n = x.length;
+        var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+        
+        for (var i = 0; i < n; i++) {
+            sumX += x[i];
+            sumY += y[i];
+            sumXY += x[i] * y[i];
+            sumX2 += x[i] * x[i];
+            sumY2 += y[i] * y[i];
+        }
+
+        var num = n * sumXY - sumX * sumY;
+        var den = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+        
+        return den === 0 ? 0 : num / den;
+    }
+
 })();
-</script>
-</body>
-</html>
 </script>
 </body>
 </html>
