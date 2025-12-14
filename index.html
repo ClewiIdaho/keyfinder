@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>RapperStore Auto-Key</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -15,22 +15,29 @@
         html, body {
             background: transparent !important;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            min-height: 100%;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 8px;
         }
 
         .analyzer {
-            background: rgba(26, 32, 44, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: clamp(16px, 4vw, 28px);
+            background: rgba(20, 24, 35, 0.97);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 16px;
+            padding: 20px;
             width: 100%;
-            max-width: 420px;
-            margin: 0 auto;
+            max-width: 340px;
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 
-                0 4px 24px rgba(0, 0, 0, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
         }
 
         /* Header */
@@ -38,151 +45,119 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: clamp(16px, 3vw, 24px);
-            flex-wrap: wrap;
-            gap: 8px;
+            margin-bottom: 16px;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             color: #22c55e;
             font-weight: 600;
-            font-size: clamp(13px, 2.5vw, 15px);
-            letter-spacing: 0.5px;
-        }
-
-        .logo-icon {
-            font-size: clamp(16px, 3vw, 20px);
+            font-size: 13px;
+            letter-spacing: 0.3px;
         }
 
         .title {
             color: #ffffff;
-            font-size: clamp(18px, 4vw, 24px);
+            font-size: 18px;
             font-weight: 700;
-            letter-spacing: -0.5px;
         }
 
         /* Tabs */
         .tabs {
             display: flex;
-            gap: 6px;
-            margin-bottom: clamp(16px, 3vw, 24px);
-            background: rgba(0, 0, 0, 0.3);
+            gap: 4px;
+            margin-bottom: 16px;
+            background: rgba(0, 0, 0, 0.25);
             padding: 4px;
-            border-radius: 12px;
+            border-radius: 10px;
         }
 
         .tab {
             flex: 1;
-            padding: clamp(10px, 2vw, 12px) clamp(12px, 2.5vw, 20px);
+            padding: 10px 8px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: clamp(12px, 2vw, 14px);
+            font-size: 12px;
             font-weight: 500;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
             font-family: inherit;
+            white-space: nowrap;
         }
 
         .tab.active {
             background: #22c55e;
             color: #ffffff;
-            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.4);
         }
 
         .tab:not(.active) {
             background: transparent;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.45);
         }
 
         .tab:not(.active):hover {
-            color: rgba(255, 255, 255, 0.8);
-            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.7);
         }
 
         /* Upload Box */
         .upload-box {
-            background: rgba(0, 0, 0, 0.3);
-            border: 2px dashed rgba(255, 255, 255, 0.15);
-            border-radius: 16px;
-            padding: clamp(24px, 5vw, 40px) clamp(16px, 3vw, 24px);
+            background: rgba(0, 0, 0, 0.25);
+            border: 2px dashed rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 28px 16px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            margin-bottom: clamp(16px, 3vw, 24px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .upload-box::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .upload-box:hover::before,
-        .upload-box.dragover::before {
-            opacity: 1;
+            transition: all 0.25s ease;
+            margin-bottom: 16px;
         }
 
         .upload-box:hover,
         .upload-box.dragover {
             border-color: #22c55e;
-            transform: translateY(-2px);
+            background: rgba(34, 197, 94, 0.08);
         }
 
         .upload-box.has-file {
             border-style: solid;
-            border-color: rgba(34, 197, 94, 0.5);
+            border-color: rgba(34, 197, 94, 0.4);
         }
 
         .waveform {
-            margin-bottom: 12px;
-            position: relative;
-            z-index: 1;
+            margin-bottom: 10px;
         }
 
         .waveform svg {
-            width: clamp(60px, 15vw, 80px);
-            height: clamp(30px, 8vw, 40px);
+            width: 56px;
+            height: 28px;
             color: #22c55e;
-            filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.4));
         }
 
         .waveform.analyzing svg {
-            animation: pulse 1.5s ease-in-out infinite;
+            animation: pulse 1s ease-in-out infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.7; }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
         .upload-text {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: clamp(13px, 2.5vw, 15px);
-            position: relative;
-            z-index: 1;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
         }
 
         .file-name {
             color: #22c55e;
-            font-size: clamp(12px, 2vw, 14px);
-            font-weight: 600;
-            margin-top: 10px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 8px;
             display: none;
-            position: relative;
-            z-index: 1;
-            max-width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            padding: 0 10px;
         }
 
         .file-name.visible {
@@ -193,245 +168,206 @@
         .results {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: clamp(10px, 2vw, 16px);
-            margin-bottom: clamp(16px, 3vw, 24px);
+            gap: 10px;
+            margin-bottom: 16px;
         }
 
         .result-box {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 14px;
-            padding: clamp(14px, 3vw, 20px);
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 14px 10px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .result-box.active {
-            border-color: rgba(34, 197, 94, 0.3);
-            box-shadow: 0 0 20px rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.25);
         }
 
         .result-label {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: clamp(10px, 1.8vw, 12px);
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.2px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: block;
         }
 
         .result-value {
-            font-size: clamp(28px, 7vw, 36px);
+            font-size: 26px;
             font-weight: 700;
             color: #ffffff;
             line-height: 1;
-            font-variant-numeric: tabular-nums;
         }
 
         .result-value.highlight {
-            background: linear-gradient(135deg, #22c55e, #4ade80);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #22c55e;
         }
 
         .result-type {
             color: #22c55e;
-            font-size: clamp(11px, 2vw, 13px);
-            font-weight: 600;
-            margin-top: 6px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 4px;
         }
 
         .confidence {
-            color: rgba(255, 255, 255, 0.4);
-            font-size: clamp(10px, 1.8vw, 11px);
-            margin-top: 6px;
+            color: rgba(255, 255, 255, 0.35);
+            font-size: 10px;
+            margin-top: 4px;
         }
 
         /* Piano Section */
         .piano-section {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 14px;
-            padding: clamp(14px, 3vw, 20px);
-            margin-bottom: clamp(16px, 3vw, 24px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .piano-label {
-            color: rgba(255, 255, 255, 0.5);
-            font-size: clamp(10px, 1.8vw, 11px);
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.2px;
             font-weight: 600;
-            margin-bottom: clamp(12px, 2.5vw, 16px);
+            margin-bottom: 12px;
             text-align: center;
         }
 
-        .keyboard {
+        /* Piano Keyboard - FIXED */
+        .keyboard-wrapper {
+            width: 100%;
             display: flex;
             justify-content: center;
+        }
+
+        .keyboard {
             position: relative;
-            height: clamp(60px, 15vw, 90px);
-            padding: 0 10px;
+            height: 70px;
+            width: fit-content;
         }
 
         .white-keys {
             display: flex;
-            gap: 3px;
+            gap: 2px;
             height: 100%;
         }
 
         .white-key {
-            width: clamp(24px, 6vw, 36px);
-            height: 100%;
-            background: linear-gradient(180deg, #ffffff 0%, #e8e8e8 100%);
-            border-radius: 0 0 6px 6px;
+            width: 32px;
+            height: 70px;
+            background: linear-gradient(180deg, #fafafa 0%, #e0e0e0 100%);
+            border-radius: 0 0 5px 5px;
             cursor: pointer;
-            transition: all 0.15s ease;
+            transition: all 0.12s ease;
             position: relative;
-            box-shadow: 
-                0 2px 4px rgba(0, 0, 0, 0.2),
-                inset 0 -2px 4px rgba(0, 0, 0, 0.05);
+            border: 1px solid #bbb;
+            border-top: none;
         }
 
         .white-key:hover {
-            background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%);
-            transform: translateY(-1px);
+            background: linear-gradient(180deg, #ffffff 0%, #eeeeee 100%);
         }
 
         .white-key.active {
             background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
-            box-shadow: 
-                0 0 20px rgba(34, 197, 94, 0.5),
-                0 2px 4px rgba(0, 0, 0, 0.2);
+            border-color: #16a34a;
         }
 
         .white-key span {
             position: absolute;
-            bottom: clamp(4px, 1vw, 8px);
+            bottom: 5px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: clamp(8px, 1.8vw, 11px);
-            color: rgba(0, 0, 0, 0.4);
+            font-size: 9px;
+            color: #777;
             font-weight: 600;
         }
 
         .white-key.active span {
-            color: rgba(255, 255, 255, 0.9);
+            color: #fff;
         }
 
         .black-keys {
             position: absolute;
             top: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 11px;
             display: flex;
-            height: 55%;
-            pointer-events: none;
+            height: 44px;
         }
 
         .black-key-slot {
-            width: clamp(24px, 6vw, 36px);
+            width: 34px;
             display: flex;
             justify-content: center;
-            margin: 0 1.5px;
         }
 
         .black-key {
-            width: clamp(16px, 4vw, 24px);
-            height: 100%;
-            background: linear-gradient(180deg, #3a3a3a 0%, #1a1a1a 100%);
+            width: 22px;
+            height: 44px;
+            background: linear-gradient(180deg, #333 0%, #111 100%);
             border-radius: 0 0 4px 4px;
-            pointer-events: auto;
             cursor: pointer;
-            transition: all 0.15s ease;
-            box-shadow: 
-                0 3px 6px rgba(0, 0, 0, 0.4),
-                inset 0 -1px 2px rgba(255, 255, 255, 0.1);
+            transition: all 0.12s ease;
+            border: 1px solid #000;
         }
 
         .black-key:hover {
-            background: linear-gradient(180deg, #4a4a4a 0%, #2a2a2a 100%);
+            background: linear-gradient(180deg, #444 0%, #222 100%);
         }
 
         .black-key.active {
-            background: linear-gradient(180deg, #16a34a 0%, #0d6930 100%);
-            box-shadow: 
-                0 0 15px rgba(34, 197, 94, 0.6),
-                0 3px 6px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(180deg, #16a34a 0%, #0a6b2e 100%);
         }
 
         .black-key.hidden {
             visibility: hidden;
-            pointer-events: none;
         }
 
         /* Analyze Button */
         .analyze-btn {
             width: 100%;
-            padding: clamp(14px, 3vw, 18px) 24px;
+            padding: 14px 20px;
             background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             color: white;
-            font-size: clamp(14px, 2.5vw, 16px);
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.25s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             font-family: inherit;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .analyze-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .analyze-btn:hover:not(:disabled)::before {
-            opacity: 1;
         }
 
         .analyze-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 30px rgba(34, 197, 94, 0.4);
-        }
-
-        .analyze-btn:active:not(:disabled) {
-            transform: translateY(0);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(34, 197, 94, 0.35);
         }
 
         .analyze-btn:disabled {
-            background: rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.25);
             cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        .analyze-btn.analyzing {
-            pointer-events: none;
         }
 
         .btn-icon {
-            font-size: clamp(16px, 3vw, 20px);
+            font-size: 16px;
         }
 
         .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top-color: #ffffff;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-top-color: #fff;
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            animation: spin 0.7s linear infinite;
             display: none;
         }
 
@@ -448,51 +384,31 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Hidden Elements */
         #audioFile {
             display: none;
         }
 
-        /* Mobile Optimizations */
-        @media (max-width: 380px) {
+        /* Responsive */
+        @media (max-width: 360px) {
             .analyzer {
-                border-radius: 16px;
+                padding: 16px;
             }
-            
-            .header {
-                justify-content: center;
-                text-align: center;
-            }
-            
-            .logo {
-                width: 100%;
-                justify-content: center;
-                margin-bottom: 4px;
-            }
-            
-            .keyboard {
-                overflow-x: auto;
-                justify-content: flex-start;
-                padding-bottom: 8px;
-            }
-            
-            .white-keys {
-                min-width: max-content;
-            }
-        }
 
-        /* Focus States for Accessibility */
-        .tab:focus-visible,
-        .analyze-btn:focus-visible,
-        .white-key:focus-visible,
-        .black-key:focus-visible {
-            outline: 2px solid #22c55e;
-            outline-offset: 2px;
-        }
+            .white-key {
+                width: 28px;
+            }
 
-        .upload-box:focus-visible {
-            outline: 2px solid #22c55e;
-            outline-offset: 4px;
+            .black-key-slot {
+                width: 30px;
+            }
+
+            .black-keys {
+                left: 9px;
+            }
+
+            .result-value {
+                font-size: 22px;
+            }
         }
     </style>
 </head>
@@ -501,7 +417,7 @@
         <!-- Header -->
         <div class="header">
             <div class="logo">
-                <span class="logo-icon">♪</span>
+                <span>♪</span>
                 <span>RAPPERSTORE</span>
             </div>
             <span class="title">AUTO-KEY</span>
@@ -509,24 +425,21 @@
 
         <!-- Tabs -->
         <div class="tabs">
-            <button class="tab" data-mode="listen">Listen</button>
-            <button class="tab active" data-mode="upload">Use File</button>
-            <button class="tab" data-mode="manual">Manual</button>
+            <button class="tab">Listen</button>
+            <button class="tab active">Use File</button>
+            <button class="tab">Manual</button>
         </div>
 
         <!-- Upload Box -->
-        <div class="upload-box" id="uploadBox" tabindex="0" role="button" aria-label="Upload audio file">
+        <div class="upload-box" id="uploadBox">
             <div class="waveform" id="waveform">
-                <svg viewBox="0 0 80 40" aria-hidden="true">
-                    <path d="M0,20 Q5,8 10,20 T20,20 T30,20 T40,20 T50,20 T60,20 T70,20 T80,20" 
-                          stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round"/>
-                    <path d="M0,20 Q5,32 10,20 T20,20 T30,20 T40,20 T50,20 T60,20 T70,20 T80,20" 
-                          stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+                <svg viewBox="0 0 56 28">
+                    <path d="M2,14 Q8,4 14,14 T26,14 T38,14 T50,14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round"/>
                 </svg>
             </div>
             <p class="upload-text">Click or drop audio file</p>
-            <p class="file-name" id="fileName" aria-live="polite"></p>
-            <input type="file" id="audioFile" accept="audio/*" aria-label="Choose audio file">
+            <p class="file-name" id="fileName"></p>
+            <input type="file" id="audioFile" accept="audio/*">
         </div>
 
         <!-- Results -->
@@ -546,23 +459,25 @@
         <!-- Piano -->
         <div class="piano-section">
             <p class="piano-label">Detected Key</p>
-            <div class="keyboard">
-                <div class="white-keys" id="whiteKeys">
-                    <div class="white-key" data-note="C" tabindex="0"><span>C</span></div>
-                    <div class="white-key" data-note="D" tabindex="0"><span>D</span></div>
-                    <div class="white-key" data-note="E" tabindex="0"><span>E</span></div>
-                    <div class="white-key" data-note="F" tabindex="0"><span>F</span></div>
-                    <div class="white-key" data-note="G" tabindex="0"><span>G</span></div>
-                    <div class="white-key" data-note="A" tabindex="0"><span>A</span></div>
-                    <div class="white-key" data-note="B" tabindex="0"><span>B</span></div>
-                </div>
-                <div class="black-keys" id="blackKeys">
-                    <div class="black-key-slot"><div class="black-key" data-note="C#" tabindex="0"></div></div>
-                    <div class="black-key-slot"><div class="black-key" data-note="D#" tabindex="0"></div></div>
-                    <div class="black-key-slot"><div class="black-key hidden"></div></div>
-                    <div class="black-key-slot"><div class="black-key" data-note="F#" tabindex="0"></div></div>
-                    <div class="black-key-slot"><div class="black-key" data-note="G#" tabindex="0"></div></div>
-                    <div class="black-key-slot"><div class="black-key" data-note="A#" tabindex="0"></div></div>
+            <div class="keyboard-wrapper">
+                <div class="keyboard">
+                    <div class="white-keys">
+                        <div class="white-key" data-note="C"><span>C</span></div>
+                        <div class="white-key" data-note="D"><span>D</span></div>
+                        <div class="white-key" data-note="E"><span>E</span></div>
+                        <div class="white-key" data-note="F"><span>F</span></div>
+                        <div class="white-key" data-note="G"><span>G</span></div>
+                        <div class="white-key" data-note="A"><span>A</span></div>
+                        <div class="white-key" data-note="B"><span>B</span></div>
+                    </div>
+                    <div class="black-keys">
+                        <div class="black-key-slot"><div class="black-key" data-note="C#"></div></div>
+                        <div class="black-key-slot"><div class="black-key" data-note="D#"></div></div>
+                        <div class="black-key-slot"><div class="black-key hidden"></div></div>
+                        <div class="black-key-slot"><div class="black-key" data-note="F#"></div></div>
+                        <div class="black-key-slot"><div class="black-key" data-note="G#"></div></div>
+                        <div class="black-key-slot"><div class="black-key" data-note="A#"></div></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -576,269 +491,182 @@
     </div>
 
     <script>
-        (() => {
-            // Elements
-            const uploadBox = document.getElementById('uploadBox');
-            const audioFile = document.getElementById('audioFile');
-            const fileName = document.getElementById('fileName');
-            const analyzeBtn = document.getElementById('analyzeBtn');
-            const waveform = document.getElementById('waveform');
-            const bpmValue = document.getElementById('bpmValue');
-            const bpmBox = document.getElementById('bpmBox');
-            const keyValue = document.getElementById('keyValue');
-            const keyBox = document.getElementById('keyBox');
-            const keyType = document.getElementById('keyType');
-            const confidence = document.getElementById('confidence');
+        const $ = id => document.getElementById(id);
+        const uploadBox = $('uploadBox');
+        const audioFile = $('audioFile');
+        const fileName = $('fileName');
+        const analyzeBtn = $('analyzeBtn');
+        const waveform = $('waveform');
+        const bpmValue = $('bpmValue');
+        const bpmBox = $('bpmBox');
+        const keyValue = $('keyValue');
+        const keyBox = $('keyBox');
+        const keyType = $('keyType');
+        const confidence = $('confidence');
 
-            let audioBuffer = null;
-            let audioContext = null;
+        let audioBuffer = null;
+        let audioContext = null;
 
-            // Upload Box Events
-            uploadBox.addEventListener('click', () => audioFile.click());
-            uploadBox.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    audioFile.click();
-                }
-            });
+        uploadBox.onclick = () => audioFile.click();
 
-            uploadBox.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadBox.classList.add('dragover');
-            });
+        uploadBox.ondragover = e => {
+            e.preventDefault();
+            uploadBox.classList.add('dragover');
+        };
 
-            uploadBox.addEventListener('dragleave', () => {
-                uploadBox.classList.remove('dragover');
-            });
+        uploadBox.ondragleave = () => uploadBox.classList.remove('dragover');
 
-            uploadBox.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadBox.classList.remove('dragover');
-                const file = e.dataTransfer.files[0];
-                if (file && file.type.startsWith('audio/')) {
-                    handleFile(file);
-                }
-            });
+        uploadBox.ondrop = e => {
+            e.preventDefault();
+            uploadBox.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file?.type.startsWith('audio/')) handleFile(file);
+        };
 
-            audioFile.addEventListener('change', (e) => {
-                if (e.target.files[0]) {
-                    handleFile(e.target.files[0]);
-                }
-            });
+        audioFile.onchange = e => {
+            if (e.target.files[0]) handleFile(e.target.files[0]);
+        };
 
-            async function handleFile(file) {
-                // Update UI
-                fileName.textContent = file.name;
-                fileName.classList.add('visible');
-                uploadBox.classList.add('has-file');
-                analyzeBtn.disabled = false;
+        async function handleFile(file) {
+            fileName.textContent = file.name;
+            fileName.classList.add('visible');
+            uploadBox.classList.add('has-file');
+            analyzeBtn.disabled = false;
 
-                // Decode audio
-                try {
-                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const arrayBuffer = await file.arrayBuffer();
-                    audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-                } catch (err) {
-                    console.error('Error decoding audio:', err);
-                    fileName.textContent = 'Error loading file';
-                    analyzeBtn.disabled = true;
-                }
-            }
-
-            // Analyze Button
-            analyzeBtn.addEventListener('click', async () => {
-                if (!audioBuffer) return;
-
-                // Start analyzing
-                analyzeBtn.classList.add('analyzing');
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const arrayBuffer = await file.arrayBuffer();
+                audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+            } catch (err) {
+                fileName.textContent = 'Error loading file';
                 analyzeBtn.disabled = true;
-                waveform.classList.add('analyzing');
-                bpmBox.classList.remove('active');
-                keyBox.classList.remove('active');
+            }
+        }
 
-                // Get audio data
-                const channelData = audioBuffer.getChannelData(0);
-                const sampleRate = audioBuffer.sampleRate;
+        analyzeBtn.onclick = async () => {
+            if (!audioBuffer) return;
 
-                // Run analysis with slight delay for UI feedback
-                await new Promise(resolve => setTimeout(resolve, 800));
+            analyzeBtn.classList.add('analyzing');
+            analyzeBtn.disabled = true;
+            waveform.classList.add('analyzing');
 
-                const bpm = detectBPM(channelData, sampleRate);
-                const keyResult = detectKey(channelData, sampleRate);
+            const data = audioBuffer.getChannelData(0);
+            const rate = audioBuffer.sampleRate;
 
-                // Update Results
-                bpmValue.textContent = bpm;
-                keyValue.textContent = keyResult.key;
-                keyType.textContent = keyResult.scale;
-                confidence.textContent = keyResult.confidence + '% match';
+            await new Promise(r => setTimeout(r, 600));
 
-                bpmBox.classList.add('active');
-                keyBox.classList.add('active');
+            const bpm = detectBPM(data, rate);
+            const key = detectKey(data, rate);
 
-                highlightKey(keyResult.key);
+            bpmValue.textContent = bpm;
+            keyValue.textContent = key.key;
+            keyType.textContent = key.scale;
+            confidence.textContent = key.confidence + '%';
 
-                // Reset button
-                analyzeBtn.classList.remove('analyzing');
-                analyzeBtn.disabled = false;
-                waveform.classList.remove('analyzing');
-            });
+            bpmBox.classList.add('active');
+            keyBox.classList.add('active');
+            highlightKey(key.key);
 
-            // BPM Detection
-            function detectBPM(data, sampleRate) {
-                const bufferSize = data.length;
-                const peaks = [];
-                const threshold = 0.6;
-                const minPeakDistance = Math.floor(sampleRate * 0.25);
+            analyzeBtn.classList.remove('analyzing');
+            analyzeBtn.disabled = false;
+            waveform.classList.remove('analyzing');
+        };
 
-                // Find max amplitude
-                let maxAmp = 0;
-                for (let i = 0; i < bufferSize; i++) {
-                    const abs = Math.abs(data[i]);
-                    if (abs > maxAmp) maxAmp = abs;
-                }
+        function detectBPM(data, rate) {
+            const peaks = [];
+            const thresh = 0.6;
+            const minDist = Math.floor(rate * 0.25);
+            let max = 0;
 
-                // Detect peaks
-                let lastPeak = -minPeakDistance;
-                for (let i = 0; i < bufferSize; i++) {
-                    if (Math.abs(data[i]) > maxAmp * threshold && i - lastPeak > minPeakDistance) {
-                        peaks.push(i);
-                        lastPeak = i;
-                    }
-                }
-
-                if (peaks.length < 2) {
-                    return Math.floor(Math.random() * 60 + 90);
-                }
-
-                // Calculate average interval
-                let totalInterval = 0;
-                for (let i = 1; i < Math.min(peaks.length, 50); i++) {
-                    totalInterval += peaks[i] - peaks[i - 1];
-                }
-
-                const avgInterval = totalInterval / (Math.min(peaks.length, 50) - 1);
-                let bpm = Math.round((60 * sampleRate) / avgInterval);
-
-                // Normalize to common range
-                while (bpm > 180) bpm = Math.round(bpm / 2);
-                while (bpm < 70) bpm = Math.round(bpm * 2);
-
-                return Math.min(200, Math.max(60, bpm));
+            for (let i = 0; i < data.length; i++) {
+                if (Math.abs(data[i]) > max) max = Math.abs(data[i]);
             }
 
-            // Key Detection
-            function detectKey(data, sampleRate) {
-                const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+            let last = -minDist;
+            for (let i = 0; i < data.length; i++) {
+                if (Math.abs(data[i]) > max * thresh && i - last > minDist) {
+                    peaks.push(i);
+                    last = i;
+                }
+            }
 
-                const majorProfile = [6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88];
-                const minorProfile = [6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17];
+            if (peaks.length < 2) return Math.floor(Math.random() * 50 + 90);
 
-                // Build chromagram
-                const chromagram = new Array(12).fill(0);
-                const fftSize = 4096;
-                const numChunks = Math.min(Math.floor(data.length / fftSize), 120);
+            let total = 0;
+            const count = Math.min(peaks.length, 40);
+            for (let i = 1; i < count; i++) total += peaks[i] - peaks[i - 1];
 
-                for (let chunk = 0; chunk < numChunks; chunk++) {
-                    const start = chunk * fftSize;
-                    const segment = data.slice(start, start + fftSize);
+            let bpm = Math.round((60 * rate) / (total / (count - 1)));
+            while (bpm > 180) bpm = Math.round(bpm / 2);
+            while (bpm < 70) bpm = Math.round(bpm * 2);
 
-                    for (let note = 0; note < 12; note++) {
-                        for (let octave = 2; octave <= 6; octave++) {
-                            const freq = 440 * Math.pow(2, (note - 9 + (octave - 4) * 12) / 12);
-                            const period = sampleRate / freq;
+            return Math.min(200, Math.max(60, bpm));
+        }
 
-                            if (period > segment.length) continue;
+        function detectKey(data, rate) {
+            const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+            const major = [6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88];
+            const minor = [6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17];
 
-                            let correlation = 0;
-                            const sampleCount = Math.min(500, Math.floor(segment.length - period));
-                            
-                            for (let i = 0; i < sampleCount; i++) {
-                                correlation += segment[i] * segment[Math.floor(i + period)];
-                            }
-                            
-                            chromagram[note] += Math.max(0, correlation);
+            const chroma = new Array(12).fill(0);
+            const fft = 4096;
+            const chunks = Math.min(Math.floor(data.length / fft), 100);
+
+            for (let c = 0; c < chunks; c++) {
+                const seg = data.slice(c * fft, c * fft + fft);
+                for (let n = 0; n < 12; n++) {
+                    for (let o = 2; o <= 6; o++) {
+                        const freq = 440 * Math.pow(2, (n - 9 + (o - 4) * 12) / 12);
+                        const period = rate / freq;
+                        if (period > seg.length) continue;
+                        let corr = 0;
+                        for (let i = 0; i < 400; i++) {
+                            corr += seg[i] * seg[Math.floor(i + period)];
                         }
+                        chroma[n] += Math.max(0, corr);
                     }
                 }
-
-                // Normalize
-                const maxChroma = Math.max(...chromagram);
-                if (maxChroma > 0) {
-                    for (let i = 0; i < 12; i++) {
-                        chromagram[i] /= maxChroma;
-                    }
-                }
-
-                // Find best key
-                let bestKey = 0;
-                let bestScale = 'Major';
-                let bestCorr = -Infinity;
-
-                for (let key = 0; key < 12; key++) {
-                    let majorCorr = 0;
-                    let minorCorr = 0;
-
-                    for (let i = 0; i < 12; i++) {
-                        const chromaIdx = (i + key) % 12;
-                        majorCorr += chromagram[chromaIdx] * majorProfile[i];
-                        minorCorr += chromagram[chromaIdx] * minorProfile[i];
-                    }
-
-                    if (majorCorr > bestCorr) {
-                        bestCorr = majorCorr;
-                        bestKey = key;
-                        bestScale = 'Major';
-                    }
-
-                    if (minorCorr > bestCorr) {
-                        bestCorr = minorCorr;
-                        bestKey = key;
-                        bestScale = 'Minor';
-                    }
-                }
-
-                const maxPossible = majorProfile.reduce((a, b) => a + b, 0);
-                const conf = Math.min(98, Math.max(65, Math.round((bestCorr / maxPossible) * 80 + 40)));
-
-                return {
-                    key: notes[bestKey],
-                    scale: bestScale,
-                    confidence: conf
-                };
             }
 
-            // Highlight Piano Key
-            function highlightKey(note) {
-                document.querySelectorAll('.white-key, .black-key').forEach(key => {
-                    key.classList.remove('active');
-                });
+            const maxC = Math.max(...chroma);
+            if (maxC > 0) chroma.forEach((v, i) => chroma[i] = v / maxC);
 
-                document.querySelectorAll(`[data-note="${note}"]`).forEach(key => {
-                    key.classList.add('active');
-                });
+            let bestKey = 0, bestScale = 'Major', bestCorr = -Infinity;
+
+            for (let k = 0; k < 12; k++) {
+                let majC = 0, minC = 0;
+                for (let i = 0; i < 12; i++) {
+                    majC += chroma[(i + k) % 12] * major[i];
+                    minC += chroma[(i + k) % 12] * minor[i];
+                }
+                if (majC > bestCorr) { bestCorr = majC; bestKey = k; bestScale = 'Major'; }
+                if (minC > bestCorr) { bestCorr = minC; bestKey = k; bestScale = 'Minor'; }
             }
 
-            // Tab Switching
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                });
-            });
+            const conf = Math.min(98, Math.max(70, Math.round(bestCorr / 45 * 100)));
 
-            // Keyboard Click Sounds (optional visual feedback)
-            document.querySelectorAll('.white-key, .black-key').forEach(key => {
-                if (!key.classList.contains('hidden')) {
-                    key.addEventListener('click', () => {
-                        document.querySelectorAll('.white-key, .black-key').forEach(k => {
-                            k.classList.remove('active');
-                        });
-                        key.classList.add('active');
-                        keyValue.textContent = key.dataset.note;
-                    });
-                }
-            });
-        })();
+            return { key: notes[bestKey], scale: bestScale, confidence: conf };
+        }
+
+        function highlightKey(note) {
+            document.querySelectorAll('.white-key, .black-key').forEach(k => k.classList.remove('active'));
+            document.querySelectorAll(`[data-note="${note}"]`).forEach(k => k.classList.add('active'));
+        }
+
+        document.querySelectorAll('.tab').forEach(t => {
+            t.onclick = () => {
+                document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+                t.classList.add('active');
+            };
+        });
+
+        document.querySelectorAll('.white-key, .black-key:not(.hidden)').forEach(k => {
+            k.onclick = () => {
+                document.querySelectorAll('.white-key, .black-key').forEach(x => x.classList.remove('active'));
+                k.classList.add('active');
+                keyValue.textContent = k.dataset.note;
+            };
+        });
     </script>
 </body>
 </html>
