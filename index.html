@@ -69,6 +69,12 @@
             z-index: 1;
         }
 
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .brand {
             display: flex;
             align-items: center;
@@ -115,23 +121,28 @@
 
         .themes {
             display: flex;
-            justify-content: center;
-            gap: 8px;
-            position: relative;
-            z-index: 1;
+            gap: 5px;
+            align-items: center;
         }
 
         .theme {
-            width: 22px;
-            height: 22px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            border: 2px solid transparent;
             cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s;
+            transition: transform 0.2s, opacity 0.2s;
+            opacity: 0.7;
         }
 
-        .theme:hover { transform: scale(1.1); }
-        .theme.active { border-color: #fff; }
+        .theme:hover { 
+            transform: scale(1.2);
+            opacity: 1;
+        }
+        
+        .theme.active { 
+            opacity: 1;
+            transform: scale(1.1);
+        }
 
         .theme[data-c="green"] { background: #22c55e; }
         .theme[data-c="blue"] { background: #3b82f6; }
@@ -184,7 +195,6 @@
             display: block;
         }
 
-        /* Preview Panel */
         .preview-panel {
             background: rgba(0, 0, 0, 0.25);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -323,7 +333,6 @@
             cursor: pointer;
         }
 
-        /* Upload Panel */
         .upload {
             background: rgba(0, 0, 0, 0.25);
             border: 2px dashed rgba(255, 255, 255, 0.12);
@@ -413,7 +422,6 @@
 
         input[type="file"] { display: none; }
 
-        /* Manual Panel */
         .manual-panel {
             background: rgba(0, 0, 0, 0.25);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -440,7 +448,7 @@
             margin-bottom: 5px;
         }
 
-        .manual-select, .manual-input {
+        .manual-select {
             width: 100%;
             padding: 8px 10px;
             background: rgba(0, 0, 0, 0.3);
@@ -450,16 +458,13 @@
             font-size: 13px;
             font-family: inherit;
             cursor: pointer;
-        }
-
-        .manual-select {
             appearance: none;
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 10px center;
         }
 
-        .manual-select:focus, .manual-input:focus {
+        .manual-select:focus {
             outline: none;
             border-color: var(--accent);
         }
@@ -502,10 +507,6 @@
             color: #fff;
         }
 
-        .compatible-key.relative {
-            border: 1px solid var(--accent);
-        }
-
         .manual-apply {
             width: 100%;
             padding: 10px;
@@ -523,21 +524,15 @@
 
         .manual-apply:hover { opacity: 0.9; }
 
-        .results {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            position: relative;
-            z-index: 1;
-        }
-
         .result {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 12px;
-            padding: 12px 10px;
+            padding: 16px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.04);
             transition: all 0.3s;
+            position: relative;
+            z-index: 1;
         }
 
         .result.glow {
@@ -555,34 +550,41 @@
         }
 
         .result-value {
-            font-size: 26px;
+            font-size: 32px;
             font-weight: 700;
-            color: #fff;
+            color: var(--accent);
             line-height: 1;
         }
-
-        .result-value.accent { color: var(--accent); }
 
         .result-meta {
             display: flex;
             justify-content: center;
-            gap: 6px;
-            margin-top: 4px;
+            gap: 8px;
+            margin-top: 6px;
             align-items: center;
         }
 
         .scale {
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--accent);
         }
 
         .conf {
-            font-size: 9px;
+            font-size: 10px;
             color: rgba(255, 255, 255, 0.35);
             background: rgba(255, 255, 255, 0.06);
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 8px;
+        }
+
+        .camelot-code {
+            font-size: 10px;
+            color: #fff;
+            background: var(--accent-dark);
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-weight: 600;
         }
 
         .piano-box {
@@ -765,20 +767,21 @@
 <body>
     <div class="app">
         <div class="header">
-            <div class="brand">
-                <div class="led" id="led"></div>
-                <span class="brand-name">RAPPERSTORE</span>
+            <div class="header-left">
+                <div class="brand">
+                    <div class="led" id="led"></div>
+                    <span class="brand-name">RAPPERSTORE</span>
+                </div>
+                <span class="title">Auto-Key</span>
             </div>
-            <span class="title">AUTO-KEY</span>
-        </div>
-
-        <div class="themes">
-            <div class="theme active" data-c="green"></div>
-            <div class="theme" data-c="blue"></div>
-            <div class="theme" data-c="purple"></div>
-            <div class="theme" data-c="orange"></div>
-            <div class="theme" data-c="pink"></div>
-            <div class="theme" data-c="cyan"></div>
+            <div class="themes">
+                <div class="theme active" data-c="green"></div>
+                <div class="theme" data-c="blue"></div>
+                <div class="theme" data-c="purple"></div>
+                <div class="theme" data-c="orange"></div>
+                <div class="theme" data-c="pink"></div>
+                <div class="theme" data-c="cyan"></div>
+            </div>
         </div>
 
         <div class="tabs">
@@ -787,7 +790,6 @@
             <button class="tab" data-tab="manual">Camelot</button>
         </div>
 
-        <!-- Preview Tab -->
         <div class="tab-content" data-panel="preview">
             <div class="preview-panel">
                 <div class="preview-placeholder" id="previewPlaceholder">
@@ -817,7 +819,6 @@
             </div>
         </div>
 
-        <!-- Analyze Tab -->
         <div class="tab-content active" data-panel="file">
             <div class="upload" id="drop">
                 <div class="upload-default">
@@ -837,7 +838,6 @@
             </div>
         </div>
 
-        <!-- Camelot Tab -->
         <div class="tab-content" data-panel="manual">
             <div class="manual-panel">
                 <div class="manual-row">
@@ -865,10 +865,6 @@
                             <option value="Minor">Minor</option>
                         </select>
                     </div>
-                    <div class="manual-group">
-                        <div class="manual-label">BPM</div>
-                        <input type="number" class="manual-input" id="manualBpm" value="120" min="40" max="300">
-                    </div>
                 </div>
                 <div class="compatible-keys">
                     <div class="compatible-label">🎛️ Compatible Keys (Camelot)</div>
@@ -878,23 +874,18 @@
             </div>
         </div>
 
-        <div class="results">
-            <div class="result" id="bpmBox">
-                <div class="result-label">BPM</div>
-                <div class="result-value" id="bpmValue">---</div>
-            </div>
-            <div class="result" id="keyBox">
-                <div class="result-label">Key</div>
-                <div class="result-value accent" id="keyValue">--</div>
-                <div class="result-meta">
-                    <span class="scale" id="scaleValue">Major</span>
-                    <span class="conf" id="confValue">--%</span>
-                </div>
+        <div class="result" id="keyBox">
+            <div class="result-label">Detected Key</div>
+            <div class="result-value" id="keyValue">--</div>
+            <div class="result-meta">
+                <span class="scale" id="scaleValue">Major</span>
+                <span class="camelot-code" id="camelotCode">--</span>
+                <span class="conf" id="confValue">--%</span>
             </div>
         </div>
 
         <div class="piano-box">
-            <div class="piano-label">Detected Key</div>
+            <div class="piano-label">Scale Notes</div>
             <div class="piano-wrap">
                 <div class="piano" id="piano">
                     <div class="whites">
@@ -918,7 +909,7 @@
         </div>
 
         <button class="btn" id="analyzeBtn" disabled>
-            <span class="btn-content">🎵 Analyze Track</span>
+            <span class="btn-content">🎵 Detect Key</span>
             <div class="spin"></div>
         </button>
     </div>
@@ -988,12 +979,11 @@
     var fileName = document.getElementById('fileName');
     var fileDuration = document.getElementById('fileDuration');
     var waveformCanvas = document.getElementById('waveformCanvas');
-    var bpmValue = document.getElementById('bpmValue');
-    var bpmBox = document.getElementById('bpmBox');
     var keyValue = document.getElementById('keyValue');
     var keyBox = document.getElementById('keyBox');
     var scaleValue = document.getElementById('scaleValue');
     var confValue = document.getElementById('confValue');
+    var camelotCode = document.getElementById('camelotCode');
     var analyzeBtn = document.getElementById('analyzeBtn');
     var piano = document.getElementById('piano');
 
@@ -1011,7 +1001,6 @@
 
     var manualKey = document.getElementById('manualKey');
     var manualScale = document.getElementById('manualScale');
-    var manualBpm = document.getElementById('manualBpm');
     var manualApply = document.getElementById('manualApply');
     var compatibleList = document.getElementById('compatibleList');
 
@@ -1031,7 +1020,6 @@
         return audioCtx;
     }
 
-    // Themes
     var themes = document.querySelectorAll('.theme');
     themes.forEach(function(t) {
         t.addEventListener('click', function() {
@@ -1049,7 +1037,6 @@
         });
     });
 
-    // Tabs
     var tabs = document.querySelectorAll('.tab');
     var panels = document.querySelectorAll('.tab-content');
 
@@ -1067,7 +1054,6 @@
         });
     });
 
-    // Player
     playBtn.addEventListener('click', function() {
         if (!audioElement) return;
         if (isPlaying) {
@@ -1158,7 +1144,6 @@
         });
     }
 
-    // Camelot
     function updateCompatibleKeys() {
         var key = manualKey.value;
         var scale = manualScale.value;
@@ -1201,14 +1186,13 @@
     manualApply.addEventListener('click', function() {
         var key = manualKey.value;
         var scale = manualScale.value;
-        var bpm = parseInt(manualBpm.value) || 120;
+        var fullKey = key + ' ' + scale;
 
-        bpmValue.textContent = bpm;
         keyValue.textContent = key;
         scaleValue.textContent = scale;
         confValue.textContent = '100%';
+        camelotCode.textContent = camelotWheel[fullKey] ? camelotWheel[fullKey].code : '--';
 
-        bpmBox.classList.add('glow');
         keyBox.classList.add('glow');
         highlightScale(key, scale);
         led.classList.add('on');
@@ -1264,7 +1248,6 @@
         }
     });
 
-    // Upload
     drop.addEventListener('click', function(e) {
         if (e.target !== fileInput) fileInput.click();
     });
@@ -1374,183 +1357,247 @@
 
         analyzeBtn.classList.add('loading');
         analyzeBtn.disabled = true;
-        bpmBox.classList.remove('glow');
         keyBox.classList.remove('glow');
 
         setTimeout(function() {
-            var samples = audioBuffer.getChannelData(0);
-            var sampleRate = audioBuffer.sampleRate;
+            var keyResult = detectKeyAdvanced(audioBuffer);
 
-            var bpm = detectBPM(samples, sampleRate);
-            var keyResult = detectKey(samples, sampleRate);
-
-            bpmValue.textContent = bpm;
             keyValue.textContent = keyResult.note;
             scaleValue.textContent = keyResult.mode;
             confValue.textContent = keyResult.confidence + '%';
+            
+            var fullKey = keyResult.note + ' ' + keyResult.mode;
+            camelotCode.textContent = camelotWheel[fullKey] ? camelotWheel[fullKey].code : '--';
 
             manualKey.value = keyResult.note;
             manualScale.value = keyResult.mode;
-            manualBpm.value = bpm;
             updateCompatibleKeys();
 
-            bpmBox.classList.add('glow');
             keyBox.classList.add('glow');
             highlightScale(keyResult.note, keyResult.mode);
 
             analyzeBtn.classList.remove('loading');
             analyzeBtn.disabled = false;
-        }, 300);
+        }, 100);
     });
 
-    // BPM Detection - Fixed for accuracy
-    function detectBPM(samples, sampleRate) {
-        var maxSamples = Math.min(samples.length, sampleRate * 30);
-        var hopSize = Math.floor(sampleRate / 100);
-        var energyLen = Math.floor(maxSamples / hopSize);
-        var energy = [];
+    // Advanced Key Detection using FFT and Krumhansl-Schmuckler algorithm
+    function detectKeyAdvanced(buffer) {
+        var sampleRate = buffer.sampleRate;
+        var channelData = buffer.getChannelData(0);
         
-        for (var i = 0; i < energyLen; i++) {
-            var sum = 0;
-            var start = i * hopSize;
-            for (var j = 0; j < hopSize; j++) {
-                if (start + j < maxSamples) {
-                    sum += samples[start + j] * samples[start + j];
-                }
+        // If stereo, mix to mono for better analysis
+        if (buffer.numberOfChannels > 1) {
+            var ch2 = buffer.getChannelData(1);
+            var mixed = new Float32Array(channelData.length);
+            for (var i = 0; i < channelData.length; i++) {
+                mixed[i] = (channelData[i] + ch2[i]) / 2;
             }
-            energy.push(Math.sqrt(sum / hopSize));
+            channelData = mixed;
         }
 
-        var maxE = Math.max.apply(null, energy);
-        if (maxE > 0) {
-            for (var i = 0; i < energy.length; i++) {
-                energy[i] /= maxE;
-            }
-        }
+        // Krumhansl-Kessler profiles (empirically derived)
+        var majorProfile = [6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88];
+        var minorProfile = [6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17];
 
-        var onset = [0];
-        for (var i = 1; i < energy.length; i++) {
-            var diff = energy[i] - energy[i - 1];
-            onset.push(diff > 0 ? diff : 0);
-        }
+        // Temperley profiles (alternative, sometimes better for pop music)
+        var majorProfileT = [5.0, 2.0, 3.5, 2.0, 4.5, 4.0, 2.0, 4.5, 2.0, 3.5, 1.5, 4.0];
+        var minorProfileT = [5.0, 2.0, 3.5, 4.5, 2.0, 4.0, 2.0, 4.5, 3.5, 2.0, 1.5, 4.0];
 
-        var minBPM = 60, maxBPM = 180;
-        var osRate = 100;
-        var minLag = Math.floor((60 / maxBPM) * osRate);
-        var maxLag = Math.floor((60 / minBPM) * osRate);
+        // Compute chroma using FFT
+        var chroma = computeChromaFFT(channelData, sampleRate);
         
-        var bestBPM = 120, bestCorr = 0;
-
-        for (var lag = minLag; lag <= maxLag; lag++) {
-            var corr = 0;
-            var cnt = Math.min(onset.length - lag, 800);
-            for (var i = 0; i < cnt; i++) {
-                corr += onset[i] * onset[i + lag];
-            }
-            
-            var bpm = Math.round((60 * osRate) / lag);
-            var weight = 1.0;
-            if (bpm >= 70 && bpm <= 140) weight = 1.4;
-            if (bpm >= 80 && bpm <= 130) weight = 1.6;
-            corr *= weight;
-            
-            if (corr > bestCorr) {
-                bestCorr = corr;
-                bestBPM = bpm;
-            }
-        }
-
-        if (bestBPM > 140) {
-            var half = Math.round(bestBPM / 2);
-            if (half >= 60) bestBPM = half;
-        }
-        if (bestBPM < 70) {
-            var dbl = bestBPM * 2;
-            if (dbl <= 180) bestBPM = dbl;
-        }
-
-        return bestBPM;
-    }
-
-    // Key Detection
-    function detectKey(samples, sampleRate) {
-        var majorProf = [6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88];
-        var minorProf = [6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17];
-
-        var chroma = [0,0,0,0,0,0,0,0,0,0,0,0];
-        var fftSize = 4096;
-        var hopSize = 2048;
-        var maxSamples = Math.min(samples.length, sampleRate * 30);
-        var numFrames = Math.min(Math.floor((maxSamples - fftSize) / hopSize), 100);
-
-        for (var f = 0; f < numFrames; f++) {
-            var offset = f * hopSize;
-            for (var pc = 0; pc < 12; pc++) {
-                for (var oct = 2; oct <= 6; oct++) {
-                    var midi = 12 * (oct + 1) + pc;
-                    var freq = 440 * Math.pow(2, (midi - 69) / 12);
-                    if (freq < 60 || freq > 2000) continue;
-                    
-                    var period = sampleRate / freq;
-                    var en = 0;
-                    var cnt = Math.min(500, fftSize - Math.ceil(period));
-                    
-                    for (var i = 0; i < cnt; i++) {
-                        var idx = offset + i;
-                        var idx2 = offset + i + Math.round(period);
-                        if (idx2 < samples.length) {
-                            en += samples[idx] * samples[idx2];
-                        }
-                    }
-                    chroma[pc] += Math.max(0, en);
-                }
-            }
-        }
-
-        var maxC = Math.max.apply(null, chroma);
-        if (maxC > 0) {
-            for (var i = 0; i < 12; i++) chroma[i] /= maxC;
-        }
-
-        var bestKey = 0, bestMode = 'Major', bestCorr = -999;
-
-        for (var k = 0; k < 12; k++) {
-            var rot = [];
+        // Normalize chroma
+        var maxChroma = Math.max.apply(null, chroma);
+        if (maxChroma > 0) {
             for (var i = 0; i < 12; i++) {
-                rot.push(chroma[(i + k) % 12]);
+                chroma[i] /= maxChroma;
+            }
+        }
+
+        var bestKey = 0;
+        var bestMode = 'Major';
+        var bestScore = -Infinity;
+        var allScores = [];
+
+        // Test all 24 keys (12 major + 12 minor)
+        for (var keyIdx = 0; keyIdx < 12; keyIdx++) {
+            // Rotate chroma to align with this key
+            var rotatedChroma = [];
+            for (var i = 0; i < 12; i++) {
+                rotatedChroma.push(chroma[(i + keyIdx) % 12]);
             }
 
-            var majC = corr(rot, majorProf);
-            if (majC > bestCorr) {
-                bestCorr = majC;
-                bestKey = k;
+            // Test major - use both profiles and average
+            var majorScoreKK = pearsonCorrelation(rotatedChroma, majorProfile);
+            var majorScoreT = pearsonCorrelation(rotatedChroma, majorProfileT);
+            var majorScore = (majorScoreKK * 0.6 + majorScoreT * 0.4);
+
+            allScores.push({ key: keyIdx, mode: 'Major', score: majorScore });
+
+            if (majorScore > bestScore) {
+                bestScore = majorScore;
+                bestKey = keyIdx;
                 bestMode = 'Major';
             }
 
-            var minC = corr(rot, minorProf);
-            if (minC > bestCorr) {
-                bestCorr = minC;
-                bestKey = k;
+            // Test minor
+            var minorScoreKK = pearsonCorrelation(rotatedChroma, minorProfile);
+            var minorScoreT = pearsonCorrelation(rotatedChroma, minorProfileT);
+            var minorScore = (minorScoreKK * 0.6 + minorScoreT * 0.4);
+
+            allScores.push({ key: keyIdx, mode: 'Minor', score: minorScore });
+
+            if (minorScore > bestScore) {
+                bestScore = minorScore;
+                bestKey = keyIdx;
                 bestMode = 'Minor';
             }
         }
 
-        var conf = Math.round(Math.max(50, Math.min(98, (bestCorr + 1) * 50)));
+        // Sort scores to find second best
+        allScores.sort(function(a, b) { return b.score - a.score; });
+        var secondBestScore = allScores[1].score;
 
-        return { note: noteNames[bestKey], mode: bestMode, confidence: conf };
+        // Calculate confidence based on margin
+        var margin = bestScore - secondBestScore;
+        var confidence = Math.round(Math.min(98, Math.max(55, 60 + margin * 150 + bestScore * 20)));
+
+        return {
+            note: noteNames[bestKey],
+            mode: bestMode,
+            confidence: confidence
+        };
     }
 
-    function corr(x, y) {
-        var n = x.length;
-        var sx = 0, sy = 0, sxy = 0, sx2 = 0, sy2 = 0;
-        for (var i = 0; i < n; i++) {
-            sx += x[i]; sy += y[i];
-            sxy += x[i] * y[i];
-            sx2 += x[i] * x[i];
-            sy2 += y[i] * y[i];
+    function computeChromaFFT(samples, sampleRate) {
+        var chroma = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        
+        var fftSize = 16384; // Large FFT for good frequency resolution
+        var hopSize = fftSize / 2;
+        
+        // Analyze up to 60 seconds from different parts of the track
+        var totalSamples = samples.length;
+        var analyzeLength = Math.min(totalSamples, sampleRate * 60);
+        
+        // Sample from beginning, middle, and end for more representative analysis
+        var positions = [];
+        if (totalSamples > analyzeLength) {
+            positions.push(0);
+            positions.push(Math.floor((totalSamples - analyzeLength) / 2));
+            positions.push(totalSamples - analyzeLength);
+        } else {
+            positions.push(0);
         }
-        var num = n * sxy - sx * sy;
-        var den = Math.sqrt((n * sx2 - sx * sx) * (n * sy2 - sy * sy));
+
+        var numFrames = 0;
+
+        positions.forEach(function(startPos) {
+            var endPos = Math.min(startPos + analyzeLength, totalSamples);
+            
+            for (var pos = startPos; pos + fftSize < endPos; pos += hopSize) {
+                // Extract frame and apply Hanning window
+                var frame = new Float32Array(fftSize);
+                for (var i = 0; i < fftSize; i++) {
+                    var window = 0.5 * (1 - Math.cos(2 * Math.PI * i / (fftSize - 1)));
+                    frame[i] = samples[pos + i] * window;
+                }
+
+                // Compute power spectrum using DFT (simplified for key frequencies)
+                var spectrum = computeSpectrum(frame, sampleRate);
+                
+                // Map spectrum to chroma
+                for (var pc = 0; pc < 12; pc++) {
+                    chroma[pc] += spectrum[pc];
+                }
+                
+                numFrames++;
+            }
+        });
+
+        // Average over frames
+        if (numFrames > 0) {
+            for (var i = 0; i < 12; i++) {
+                chroma[i] /= numFrames;
+            }
+        }
+
+        return chroma;
+    }
+
+    function computeSpectrum(frame, sampleRate) {
+        var chromaEnergy = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        var fftSize = frame.length;
+        
+        // Reference frequencies for each pitch class across multiple octaves
+        var A4 = 440;
+        
+        for (var pc = 0; pc < 12; pc++) {
+            // Check octaves 2-6 (roughly 65Hz to 2000Hz)
+            for (var octave = 2; octave <= 6; octave++) {
+                var midi = 12 * (octave + 1) + pc;
+                var freq = A4 * Math.pow(2, (midi - 69) / 12);
+                
+                if (freq < 60 || freq > 2000) continue;
+                
+                // Convert frequency to bin index
+                var bin = Math.round(freq * fftSize / sampleRate);
+                
+                if (bin < 1 || bin >= fftSize / 2) continue;
+                
+                // Compute energy at this bin using Goertzel algorithm (more accurate for specific frequencies)
+                var energy = goertzel(frame, freq, sampleRate);
+                
+                // Weight by octave (emphasize mid-range)
+                var weight = 1.0;
+                if (octave === 3 || octave === 4) weight = 1.4;
+                if (octave === 5) weight = 1.2;
+                
+                chromaEnergy[pc] += energy * weight;
+            }
+        }
+        
+        return chromaEnergy;
+    }
+
+    // Goertzel algorithm for detecting specific frequencies
+    function goertzel(samples, targetFreq, sampleRate) {
+        var n = samples.length;
+        var k = Math.round(targetFreq * n / sampleRate);
+        var w = 2 * Math.PI * k / n;
+        var cosw = Math.cos(w);
+        var sinw = Math.sin(w);
+        var coeff = 2 * cosw;
+        
+        var s0 = 0, s1 = 0, s2 = 0;
+        
+        for (var i = 0; i < n; i++) {
+            s0 = samples[i] + coeff * s1 - s2;
+            s2 = s1;
+            s1 = s0;
+        }
+        
+        var real = s1 - s2 * cosw;
+        var imag = s2 * sinw;
+        
+        return Math.sqrt(real * real + imag * imag) / n;
+    }
+
+    function pearsonCorrelation(x, y) {
+        var n = x.length;
+        var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0, sumY2 = 0;
+        
+        for (var i = 0; i < n; i++) {
+            sumX += x[i];
+            sumY += y[i];
+            sumXY += x[i] * y[i];
+            sumX2 += x[i] * x[i];
+            sumY2 += y[i] * y[i];
+        }
+        
+        var num = n * sumXY - sumX * sumY;
+        var den = Math.sqrt((n * sumX2 - sumX * sumX) * (n * sumY2 - sumY * sumY));
+        
         return den === 0 ? 0 : num / den;
     }
 
